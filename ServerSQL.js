@@ -54,11 +54,18 @@ function  mysqlConnectServer(){
 			// Step 8.2: Drop the table if exists.
 			//mysqlDropTableExists(tableDrop);
 
-			// Step 9:
-			var tableUPD = 'user_info';
-			var addressUPD = 'address';
-			var old = '', newUPD = '';
-			mysqlUpdate(tableUPD, addressUPD, old, newUPD);
+			// Step 9: UPDATE (table) FROM (address) = (new) WHERE (old)
+			// var tableUPD = 'user_info';
+			// var addressUPD = 'address';
+			// var old = '', newUPD = '';
+			// mysqlUpdate(tableUPD, addressUPD, old, newUPD);
+
+			// Step 10: LIMIT ...
+			var tableLimit = 'user_info';
+			var limit = 5;
+			var posistion = 0;
+			//mysqlLimit(tableLimit); // 10.1
+			mysqlLimitFromPosition(tableLimit, limit, posistion);
 		}	
 	});
 }
@@ -179,12 +186,36 @@ function mysqlUpdate(tableUPD, addressUPD, old, newUPD) {
 		LOG(result.affectedRows + ' record(s) updated');
 	});
 }
-// Step 10: Limit
-function mysqlLimit() {
-	
+// Step 10: Limit => list out data with limit value
+// 10.1: basic
+function mysqlLimit(table, limitValue) {
+	var sqlLimit = 'SELECT * FROM user_info LIMIT 5';
+	sqlServer.query(sqlLimit, function(err, result) {
+		if(err) throw err;
+		LOG(result);
+	});
+}
+// 10.2: start table LIMIT(value) from position OFFSET(post)
+function mysqlLimitFromPosition(table, limit, position) {
+
+	//Shorter syntax:
+	// var sqlLimit = 'SELECT * FROM user_info LIMIT 0, 5';
+	var sqlLimit = 'SELECT * FROM user_info LIMIT 5 OFFSET 0';
+	sqlServer.query(sqlLimit, function(err, result) {
+		if(err) throw err;
+		LOG(result);
+	});	
 }
 
 // Step 11: Join
+function mysqlJoin() {
+	var sqlJoin = '';
+	sqlServer.query(sqlJoin, function(err, result) {
+		if(err) throw err;
+		LOG("JOIN: ");
+	});
+}
+
 
 // ============================================================
  
