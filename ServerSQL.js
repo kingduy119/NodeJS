@@ -22,21 +22,50 @@ function  mysqlConnectServer(){
 			/////////////////////////////////////
 
 			// Step 2: Create table
-			var table = 'user_action (buy_item VARCHAR(255))';
-			mysqlCreateTable(table);
-
-			var target = 'user_info';
-			var userInfo = '(fullname, address) VALUES("Hoang Duy", "186 HIGHLAND")';
+			var tableCreate = 'user_info (fullname VARCHAR(255), address VARCHAR(255))';
+			//mysqlCreateTable(table);
+			
 			// Step 3: Insert Into *
-			//mysqlInsertInto(target + ' ' + userInfo);
+			var tableInfo = 'user_info';
+			var userInfo = ' (fullname, address) VALUES("Hoang Duy", "186 BD")';
+			//mysqlInsertInto(target + userInfo);
 
 			// Step 4: Select From *
-			mysqlSelectFrom(target);
+			// var tableSelect
+			//mysqlSelectFrom(tableSelect);
 
 			// Step 5: Where(table, where, content)
-			var where = 'fullname';
-			var content = 'Nguyen Hoang Duy';
-			mysqlWhere(target, where, content);
+			// tableWhere
+			// var where = 'fullname';
+			// var content = 'Nguyen Hoang Duy';
+			// mysqlWhere(tableWhere, where, content);
+
+			// Step 6:  Skip, because no need for now
+
+			// Step 7: Delete key value
+			// var tableDelete
+			// var address = 'address';
+			// var keyDelete = '186 HIGHLAND';
+			//mysqlDeleteFrom(tableDelete, address, keyDelete);
+
+			// Step 8.1: Drop the table
+			var tableDrop = 'user_info';
+			// mysqlDropTable(tableDrop);
+			// Step 8.2: Drop the table if exists.
+			//mysqlDropTableExists(tableDrop);
+
+			// Step 9: UPDATE (table) FROM (address) = (new) WHERE (old)
+			// var tableUPD = 'user_info';
+			// var addressUPD = 'address';
+			// var old = '', newUPD = '';
+			// mysqlUpdate(tableUPD, addressUPD, old, newUPD);
+
+			// Step 10: LIMIT ...
+			var tableLimit = 'user_info';
+			var limit = 5;
+			var posistion = 0;
+			//mysqlLimit(tableLimit); // 10.1
+			mysqlLimitFromPosition(tableLimit, limit, posistion);
 		}	
 	});
 }
@@ -71,11 +100,11 @@ function mysqlCreateTable(table){
 function mysqlInsertInto(info){
 	var insertInfo = 'INSERT INTO ' + info;
 	sqlServer.query(insertInfo, function(err, result){
-		if(err) LOG('Unable to insert: ' + info);
-		else {
-			LOG('4:: Inserted info!');
-			return true;
+		if(err) {
+			LOG('Unable to insert: ' + info);
+			throw err;
 		}
+		LOG('4:: Inserted: ' + info);
 	});
 }
 
@@ -94,7 +123,7 @@ function mysqlSelectFrom(from) {
 // Step 5: Where
 function mysqlWhere(table, where, content) {
 	var fullname = 'Nguyen Hoang Duy';
-	var address = '598 TCV';
+	var address = '123 TCV';
 	var sql = 'SELECT * FROM user_info WHERE fullname = ? OR address = ?';	
 	sqlServer.query(sql, [fullname, address], function(err, result) {
 		if(err) {
@@ -105,7 +134,90 @@ function mysqlWhere(table, where, content) {
 	});
 }
 
-// Defined end
+// Step 6: Order By
+// function mysqlOderBy() {
+// 	sqlServer.query("SELECT * FROM customers ORDER BY name", function() {
+// 		if(err) {
+// 			LOG("Error: Oder By function from server!");
+// 			throw err;
+// 		}
+// 	});
+// }
+
+// Step 7: Delete
+function mysqlDeleteFrom(table, address, keyDelete) {
+	var del = 'DELETE FROM ' + table;
+	var from = ' WHERE ' + address;
+	var sqlDelete = 'DELETE FROM user_info WHERE address = "186 HIGHLAND"';
+	sqlServer.query(sqlDelete, function(err, result) {
+		if(err) {
+			LOG('Error: Server can\"t delete!');
+			throw err;
+		}
+		LOG("Deleted: " + result.affectedRows);
+	});
+}
+
+// Step 8.1: Drop table:
+function mysqlDropTable(table) {
+	var sqlDrop = 'DROP TABLE user_info';
+	sqlServer.query(sqlDrop, function(err, result) {
+		if(err) {
+			LOG('Error: Server can"t drop ' + table);
+			throw err;
+		}
+		LOG('Drop: ' + table);
+	});
+}
+// Step 8.2: Drop the table if it exists:
+function mysqlDropTableExists(table){
+	var sqlDrop = 'DROP TABLE IF EXISTS user_info'; // + table
+	sqlServer.query(sqlDrop, function(err, result) {
+		if(err) throw err;
+		LOG('DROPED: ' + table);
+	});
+}
+
+// Step 9: Update
+function mysqlUpdate(tableUPD, addressUPD, old, newUPD) {
+	var sqlUpdate = 'UPDATE user_info SET address = "123 TCV" WHERE address = "186 BD"';
+	sqlServer.query(sqlUpdate, function(err, result) {
+		if(err) throw err;
+		LOG(result.affectedRows + ' record(s) updated');
+	});
+}
+// Step 10: Limit => list out data with limit value
+// 10.1: basic
+function mysqlLimit(table, limitValue) {
+	var sqlLimit = 'SELECT * FROM user_info LIMIT 5';
+	sqlServer.query(sqlLimit, function(err, result) {
+		if(err) throw err;
+		LOG(result);
+	});
+}
+// 10.2: start table LIMIT(value) from position OFFSET(post)
+function mysqlLimitFromPosition(table, limit, position) {
+
+	//Shorter syntax:
+	// var sqlLimit = 'SELECT * FROM user_info LIMIT 0, 5';
+	var sqlLimit = 'SELECT * FROM user_info LIMIT 5 OFFSET 0';
+	sqlServer.query(sqlLimit, function(err, result) {
+		if(err) throw err;
+		LOG(result);
+	});	
+}
+
+// Step 11: Join
+function mysqlJoin() {
+	var sqlJoin = '';
+	sqlServer.query(sqlJoin, function(err, result) {
+		if(err) throw err;
+		LOG("JOIN: ");
+	});
+}
+
+
+// ============================================================
  
 // Main function user
 function UserDataInit(){
