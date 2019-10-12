@@ -8,7 +8,7 @@ const events = eventIds => {
             return events.map(event => {
                 return { ...event._doc,
                         _id: event.id,
-                        creator: user.bind(this, event.creator)
+                        creator: user.bind(this, event._doc.creator)
                     };
             });
         })
@@ -63,6 +63,14 @@ module.exports = {
                 console.log(result);
                 createEvent = { ...result._doc, _id: result._doc._id.toString() };
                 return UserModel.findById('5d9cd296a9f9aa151094cbcf');
+            })
+            .then(user => {
+                if(!user) { throw new Error('User not found.'); }
+                user.createEvents.push(event);
+                return user.save();
+            })
+            .then(result => {
+                return createEvent;
             })
             .catch(err => {
                 console.log(err);
