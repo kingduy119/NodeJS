@@ -2,8 +2,9 @@
 const EventModel = require('../../models/eventModel');
 const UserModel = require('../../models/userModel');
 
-const events = eventIds => {
-    return EventModel.find({ _id: { $in: eventIds } })
+const events = async eventIds => {
+    try {
+        const events = await EventModel.find({ _id: { $in: eventIds } })
         .then(events => {
             return events.map(event => {
                 return { ...event._doc,
@@ -12,9 +13,10 @@ const events = eventIds => {
                     };
             });
         })
-        .catch(err => {
-            throw err;
-        });
+        return events;
+    } catch (err) {
+        throw err;
+    }
 };
 
 const user = userId => {
@@ -61,12 +63,16 @@ module.exports = {
             .save()
             .then(result => {
                 console.log(result);
-                createEvent = { ...result._doc, _id: result._doc._id.toString() };
+                createEvent = {
+                    ...result._doc,
+                    _id: result._doc._id.toString(),
+                    creator: user.bind(this, result._doc.creator)
+                };
                 return UserModel.findById('5d9cd296a9f9aa151094cbcf');
             })
             .then(user => {
                 if(!user) { throw new Error('User not found.'); }
-                user.createEvents.push(event);
+                //user.createEvents.push(event);
                 return user.save();
             })
             .then(result => {
