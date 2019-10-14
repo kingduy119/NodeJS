@@ -1,6 +1,7 @@
 
 const EventModel = require('../../models/eventModel');
 const UserModel = require('../../models/userModel');
+const BookingModel = require('../../models/booking');
 const bcrypt = require('bcrypt');
 
 /// --- EVENTS
@@ -51,6 +52,19 @@ module.exports = {
             throw err;
         }
     },
+    booking: async () => {
+        try {
+            const bookings = await BookingModel.find();
+            return bookings.map(booking => {
+                return {
+                    ...booking._doc,
+                    _id: booking.id,
+                    createAt: new Date(booking._doc.createAt).toISOString(),
+                    updateAt: new Date(booking._doc.updateAt).toISOString()
+                }
+            });
+        } catch (err) { throw err; }
+    },
     createEvent: async args => {
         const event = new EventModel({
             title: args.eventInput.title,
@@ -69,9 +83,10 @@ module.exports = {
                 date: new Date(result._doc.date).toISOString(),
                 creator: await user.bind(this, result._doc.creator)
             };
-            const user = await UserModel.findById('5d9cd296a9f9aa151094cbcf');
-            if(!user) {throw new Error('User not found.');}
-            await user.save();
+            const creator = await UserModel.findById('5d9cd296a9f9aa151094cbcf');
+            if(!creator) {throw new Error('User not found.');}
+            creator.createEvents.push(createEvent);
+            await creator.save();
             
             return createEvent;
         } catch (err) { throw err; }
@@ -94,6 +109,20 @@ module.exports = {
                 _id: result.id
             };
         } catch (err) { throw err; }
+    },
+    bookEvent: async args => {
+        const fetchedEvent = await EventModel.findOne({_id: args.eventID});
+        const booking = new BookingModel({
+            user: '5d9cd296a9f9aa151094cbcf',
+            event: fetchedEvent
+        });
+        const result = booking.save();
+        return {
+            ...result._doc,
+            _id: result.id,
+            createAt: new Date(result._doc.createAt).toISOString(),
+            updateAt: new Date(result._doc.updateAt).toISOString()
+        }
     }
 };
 
