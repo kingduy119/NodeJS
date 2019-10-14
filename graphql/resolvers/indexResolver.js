@@ -4,17 +4,21 @@ const UserModel = require('../../models/userModel');
 const BookingModel = require('../../models/booking');
 const bcrypt = require('bcrypt');
 
+const tranformEvent = event => {
+    return {
+        ...event._doc,
+        _id: event.id,
+        // date: new Date(event._doc.date).toISOString(),
+        creator: userInstace.bind(this, event.creator)
+    };
+};
+
 /// --- EVENTS
-const events = async eventIds => {
+const eventInstance = async eventIds => {
     try {
         const events = await EventModel.find({ _id: { $in: eventIds } })
         return events.map(event => {
-            return { ...event._doc,
-                    _id: event.id,
-                    // price: event.price,
-                    data: new Date(event._doc.date).toISOString(),
-                    creator: user.bind(this, event._doc.creator)
-                };
+            return tranformEvent(event);
         });        
     } catch (err) {
         throw err;
@@ -22,75 +26,81 @@ const events = async eventIds => {
 };
 
 // --- USER
-const user = async userId => {
+const userInstace = async userId => {
     try {
         const user = await UserModel.findById(userId)
         return {
             ...user._doc,
             _id: user.id,
-            createEvents: events.bind(this, user._doc.createEvents)
+            createEvent: eventInstance.bind(this, user._doc.createEvent)
         };
     } catch (err) {
         throw err;
     }
 };
 
+// --- SIMPLE EVENT
+const simpleEvent = async eventID => {
+    try {
+        const event = await EventModel.findById(eventID);
+        return tranformEvent(event);
+    } catch (err) { throw err; }
+}
+
 // --- Export:
 module.exports = {
+    // QUERY Event
     events: async () => {
         try {
-            const events = await EventModel.find();
-            return events.map(event => {
-                return { 
-                    ...event._doc,
-                    _id: event.id,
-                    date: new Date(event._doc.date).toISOString(),
-                    creator: user.bind(this, event.creator)
-                };
+            const eventList = await EventModel.find();
+            eventList.map(event => {
+                return tranformEvent(event);
             });
-        } catch (err) {
-            throw err;
-        }
+            return eventList;
+        } catch (err) { throw err; }
     },
-    booking: async () => {
+
+    // QUERY Booking
+    bookings: async () => {
         try {
-            const bookings = await BookingModel.find();
-            return bookings.map(booking => {
+            const bookingList = await BookingModel.find();
+            console.log("Length: " + bookingList.length);
+            return bookingList.map(booking => {
                 return {
                     ...booking._doc,
                     _id: booking.id,
-                    createAt: new Date(booking._doc.createAt).toISOString(),
-                    updateAt: new Date(booking._doc.updateAt).toISOString()
-                }
+                    user: userInstace.bind(this, booking._doc.user),
+                    event: simpleEvent.bind(this, booking._doc.event)
+                    // ,
+                    // createAt: new Date(booking._doc.createAt).toISOString(),
+                    // updateAt: new Date(booking._doc.updateAt).toISOString()
+                };
             });
         } catch (err) { throw err; }
     },
+
     createEvent: async args => {
         const event = new EventModel({
             title: args.eventInput.title,
             description: args.eventInput.description,
             price: args.eventInput.price,
-            date: new Date(args.eventInput.date),
-            creator: '5d9cd296a9f9aa151094cbcf'
+            creator: args.eventInput.userID
         });
 
         try {
-            let createEvent;
             const result = await event.save();
-            createEvent = {
-                ...result._doc,
-                _id: result._doc._id.toString(),
-                date: new Date(result._doc.date).toISOString(),
-                creator: await user.bind(this, result._doc.creator)
-            };
-            const creator = await UserModel.findById('5d9cd296a9f9aa151094cbcf');
-            if(!creator) {throw new Error('User not found.');}
-            creator.createEvents.push(createEvent);
-            await creator.save();
-            
+            const createEvent = tranformEvent(result);
+
+            const findUser = await UserModel.findById(args.eventInput.userID);
+            if(!findUser) {throw new Error('User not found.');}
+
+            findUser.createEvent.push(createEvent);
+            await findUser.save();
+
             return createEvent;
         } catch (err) { throw err; }
     },
+
     createUser: async args => {
         try {
             const oldUser = await UserModel.findOne( {email: args.userInput.email} );
@@ -110,19 +120,45 @@ module.exports = {
             };
         } catch (err) { throw err; }
     },
-    bookEvent: async args => {
-        const fetchedEvent = await EventModel.findOne({_id: args.eventID});
-        const booking = new BookingModel({
-            user: '5d9cd296a9f9aa151094cbcf',
-            event: fetchedEvent
-        });
-        const result = booking.save();
-        return {
-            ...result._doc,
-            _id: result.id,
-            createAt: new Date(result._doc.createAt).toISOString(),
-            updateAt: new Date(result._doc.updateAt).toISOString()
+
+    createBooking: async args => {
+        try {
+            const findEvent = await EventModel.findById(args.eventID);
+            if(!findEvent) throw new Error("Event isn\'t exist");
+
+            const booking = new BookingModel({
+                user: "5da3fce038d821109008d1d2",
+                event: findEvent
+            });
+            const result = await booking.save();
+            return {
+                ...result._doc,
+                _id: result.id,
+                user: userInstace.bind(this, booking._doc.user),
+                event: simpleEvent.bind(this, booking._doc.event)
+                // ,
+                // createAt: new Date(result._doc.createAt).toISOString(),
+                // updateAt: new Date(result._doc.updateAt).toISOString()
+            };
+        } catch (err) {
+            console.log("Error");
+            throw err; 
         }
+    },
+
+    cancelBooking: async args => {
+        try {
+            const booking = await BookingModel.findById(args.bookingID).populate('event');
+            if(!booking) throw new Error('User isn\'t existed');
+
+            const event = {
+                ...booking.event._doc,
+                _id: booking.event.id
+                
+            };
+            await BookingModel.deleteOne( {_id: args.bookingID} );
+            return  event;
+        } catch (err) { throw err; }
     }
 };
 

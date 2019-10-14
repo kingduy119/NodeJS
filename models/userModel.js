@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
         type: String,
         require: true
     },
-    createdEvents: [
+    createEvent: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Event'
@@ -17,4 +17,4 @@ const userSchema = mongoose.Schema({
     ]
 });
 
-module.exports = mongoose.model('Users', userSchema);
+module.exports = mongoose.model('user', userSchema);

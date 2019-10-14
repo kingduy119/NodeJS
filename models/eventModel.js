@@ -13,14 +13,10 @@ const eventSchema = mongoose.Schema({
         type: Number,
         require: true
     },
-    date: {
-        type: Date,
-        require: true
-    },
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }
 });
 
-module.exports = mongoose.model('Event', eventSchema);
+module.exports = mongoose.model('event', eventSchema);
