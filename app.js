@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
+const isAuth = require('./middleware/is-auth');
 
 const userRoutes = require('./routes/user');
 const bookRoutes = require('./routes/books');
@@ -20,6 +20,7 @@ const graphiqlHttp = require('express-graphql');
 const graphQlSchema = require('./graphql/schema/indexSchema');
 const graphQlResolver = require('./graphql/resolvers/indexResolver');
 
+app.use(isAuth);
 app.use('/graphql',
     graphiqlHttp({
         schema: graphQlSchema,

@@ -1,9 +1,14 @@
 const BookingModel = require('../../models/booking');
-const { userInstace } = require('./merges');
+const EventModel = require('../../models/eventModel');
+const { userInstace, simpleEvent } = require('./merges');
 
 module.exports = {
     // --- QUERY Booking
-    bookings: async () => {
+    bookings: async (args, req) => {
+        if(!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
+
         try {
             const bookingList = await BookingModel.find();
             console.log("Length: " + bookingList.length);
@@ -19,7 +24,11 @@ module.exports = {
     },
 
     // --- MUTATION Booking
-    createBooking: async args => {
+    createBooking: async (args, req) => {
+        if(!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
+
         try {
             const findEvent = await EventModel.findById(args.eventID);
             if(!findEvent) throw new Error("Event isn\'t exist");
@@ -41,7 +50,11 @@ module.exports = {
         }
     },
 
-    cancelBooking: async args => {
+    cancelBooking: async (args, req) => {
+        if(!req.isAuth) {
+            throw new Error('Unauthenticated!');
+        }
+        
         try {
             const booking = await BookingModel.findById(args.bookingID).populate('Event');
             if(!booking) throw new Error('Booking isn\'t existed');
