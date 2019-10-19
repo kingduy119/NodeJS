@@ -22,12 +22,13 @@ module.exports = {
             });
         } catch (err) { throw err; }
     },
-
+    // --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
+    
     // --- MUTATION Booking
     createBooking: async (args, req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated!');
-        }
+        // if(!req.isAuth) {
+        //     throw new Error('Unauthenticated!');
+        // }
 
         try {
             const findEvent = await EventModel.findById(args.eventID);
@@ -51,9 +52,9 @@ module.exports = {
     },
 
     cancelBooking: async (args, req) => {
-        if(!req.isAuth) {
-            throw new Error('Unauthenticated!');
-        }
+        // if(!req.isAuth) {
+        //     throw new Error('Unauthenticated!');
+        // }
         
         try {
             const booking = await BookingModel.findById(args.bookingID).populate('Event');
@@ -67,21 +68,7 @@ module.exports = {
             return  event;
         } catch (err) { throw err; }
     }
+
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---

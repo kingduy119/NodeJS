@@ -20,6 +20,16 @@ const graphiqlHttp = require('express-graphql');
 const graphQlSchema = require('./graphql/schema/indexSchema');
 const graphQlResolver = require('./graphql/resolvers/indexResolver');
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if(req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 app.use(isAuth);
 app.use('/graphql',
     graphiqlHttp({
@@ -41,6 +51,7 @@ app.use('/book', bookRoutes);
 
 // Handle error:
 // ===========================================================================
+
 app.use((req, res, next) => {
     const error = new Error('Not found');
     error.status = 404;

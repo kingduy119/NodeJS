@@ -35,7 +35,6 @@ module.exports = buildSchema(`
         title: String!
         description: String!
         price: Float!
-        userID: String!
     }
 
     input UserInput {
@@ -61,9 +60,3 @@ module.exports = buildSchema(`
         mutation: RootMutation
     }
 `);
-
-
-
-
-
-
