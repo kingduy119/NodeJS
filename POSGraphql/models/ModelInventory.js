@@ -19,11 +19,7 @@ const schemaInventoryTicket = mongoose.Schema({
 });
 
 const schemaInventory = mongoose.Schema({
-<<<<<<< HEAD
     day: {type: Date, require: true},
-=======
-    day: {type: Number, require: true},
->>>>>>> 28df3456cf6c9b16795fbf9b29b0ea079df3b7a2
     total_item:[
         {
             type: mongoose.Schema.Types.ObjectId,
