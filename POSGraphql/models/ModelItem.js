@@ -7,4 +7,4 @@ const schemaItem = mongoose.Schema({
     product_code: {type: Number, require: true}
 });
 
-module.exports = mongoose.model('item', schemaItem);
+module.exports = mongoose.model('Item', schemaItem);
