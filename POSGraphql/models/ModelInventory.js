@@ -4,12 +4,10 @@ const schemaInventoryTicket = mongoose.Schema({
     method_io:{type: String, require: true},
     date_in:{type: Date},
     date_out:{type: Date},
-    author:[
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }
-    ],
+    author:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     list_item:[
         {
             type: mongoose.Schema.Types.ObjectId,
