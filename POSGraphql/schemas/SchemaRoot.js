@@ -3,17 +3,20 @@ const {
     GraphQLSchema
 } = require('graphql');
 
+// Schemas
+const ItemSchema = require('./ItemSchema');
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-
+        FindItem: ItemSchema.findItem
     }
 });
 
-const RootQuery = new GraphQLObjectType({
+const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        InventoryIn: 
+        AddItem: ItemSchema.addItem 
     }
 });
 
