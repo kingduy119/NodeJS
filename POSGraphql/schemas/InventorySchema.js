@@ -16,6 +16,9 @@ import {
 const InventoryTicketType = new GraphQLObjectType({
     name:'InventoryTicket',
     field: () => ({
-        
+        day:{type: GraphQLInt},
+        total_item:{type: GraphQLInt},
+        ticket_input:{type: GraphQLInt},
+        ticket_output:{type: GraphQLInt},
     })
 });

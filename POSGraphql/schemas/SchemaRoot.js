@@ -13,7 +13,7 @@ const RootQuery = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        
+        InventoryIn: 
     }
 });
 
