@@ -5,18 +5,27 @@ const {
 
 // Schemas
 const ItemSchema = require('./ItemSchema');
+const UserSchema = require('../schemas/UserSchema');
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        FindItem: ItemSchema.findItem
+        // User
+        FindUserName: UserSchema.findByUsername,
+
+        // Item
+        FindItemById: ItemSchema.findById
     }
 });
 
 const Mutation = new GraphQLObjectType({
     name: 'Mutation',
     fields: {
-        AddItem: ItemSchema.addItem 
+        // User
+        AddUser: UserSchema.addOne,
+
+        // Item
+        AddItemOne: ItemSchema.addOne
     }
 });
 

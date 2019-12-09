@@ -17,13 +17,12 @@ const ItemType = new GraphQLObjectType({
         id:{type: GraphQLID},
         name:{type: GraphQLString},
         total:{type: GraphQLInt},
-        price:{type: GraphQLInt},
-        inventory_ticket_id:{type: GraphQLID}
+        price:{type: GraphQLInt}
     })
 });
 
 // QUERY
-exports.findItem = {
+exports.findById = {
     type: ItemType,
     args: {
         id: {type: new GraphQLNonNull(GraphQLID)}
@@ -31,20 +30,25 @@ exports.findItem = {
     resolve: async (parent, args) => {
         let item = ModelItem.findById({id: args.id});
         return await item;
-        // return {
-        //     id: item.id,
-        //     name: item.name,
-        //     total: item.total,
-        //     price: item.total,
-        //     inventory_ticket_id: item.inventory_ticket_id
-        // };
+    }
+}
+
+exports.findByCode = {
+    type: ItemType,
+    args: {
+        code: {type: new GraphQLNonNull(GraphQLID)}
+    },
+    resolve: async (parent, args) => {
+        let listItem = ModelItem.find({id: args.code});
+        return await listItem;
     }
 }
 
 // MUTATION
-exports.addItem = {
+exports.addOne = {
     type: ItemType,
     args: {
+        code:{type: GraphQLString},
         name:{type: GraphQLString},
         total:{type: GraphQLInt},
         price:{type: GraphQLInt}
@@ -53,6 +57,7 @@ exports.addItem = {
     },
     resolve: async (parent, args) => {
         let item = new ModelItem({
+            code: args.code,
             name: args.name,
             total: args.total,
             price: args.price
