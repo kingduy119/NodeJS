@@ -114,6 +114,8 @@ class UserPage extends Component {
         this.usernameEl= React.createRef();
         this.emailEl = React.createRef();
         this.passwordEl = React.createRef();
+
+        this.readUsername = "";
     }
 
     switchModeHandler = () => {
@@ -180,6 +182,42 @@ class UserPage extends Component {
         });
     };
 
+    findUser = () => {
+        const username = this.readUsername.current.value;
+        if(user.trim().length === 0) return;
+
+        requestBody = {
+            query:`
+                query {
+                    FindUsername(username: "${username}") {
+                        id
+                        username
+                        email
+                    }
+                }
+            `
+        };
+
+        fetch('http://localhost:1000/graphql', {
+            method: 'POST',
+            body: JSON.stringify(requestBody),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => {
+            console.log(res);
+            if(res.status !== 200 && res.status !== 201) {
+                throw new Error('Failed');
+            } else {
+                return res.json();
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
     render() {
         return(
             <React.Fragment>
@@ -214,7 +252,40 @@ class UserPage extends Component {
 
                         {/* Read */}
                         <div className="col-sm-3 bg-info text-white">
-                            
+                            <form>
+                                <div className="form-groups">
+                                    <label htmlFor="readusername">Username</label>
+                                    <input type="text" className="form-control" id="readusername" placeholder="Username" ref={this.readUsername}/>
+                                </div>
+
+                                <div className="form-group form-check">
+                                    <button
+                                        type="button"
+                                        className="btn btn-light mb-2 mr-sm-2"
+                                        onClick={}
+                                    >Find</button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-light mb-2 mr-sm-2"
+                                        onClick={}
+                                    >List
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div className="container">
+                                <table className="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {/* To do somthing to show information user or list user */}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
                         {/* Update */}
