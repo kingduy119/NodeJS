@@ -12,12 +12,20 @@ class UserController {
             typeof username !== "String" ||
             (!email || typeof email !== "String")
         ) {
-            return res.status(400).jsion({
+            return res.status(400).json({
                 message: "Invalid Params"
             });
         }
 
         const user = await this.userService.create(username, email, password);
+        return res.json({
+            data: user
+        });
+    }
+
+    async getUser(req, res) {
+        const { username } = req.params;
+        const user = await this.userService.getUser(username);
         return res.json({
             data: user
         });
