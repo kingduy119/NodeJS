@@ -8,7 +8,7 @@ const UserService = require('./user.service');
 
 describe("UserController", () => {
     describe("register", async () => {
-        let status, json, res, userControler, userService;
+        let status, json, req, res, userControler, userService;
 
         beforeEach(() => {
             status = sinon.stub();
@@ -21,7 +21,7 @@ describe("UserController", () => {
 
         it("Should not register a user when username param is not provied",
         async () => {
-            const req = { body: {email: faker.internet.email() } };
+            req = { body: {email: faker.internet.email() } };
             await new UserController().register(req, res);
             expect(status.calledOnce).to.be.true;
             expect(status.args[0][0]).to.equal(400);
@@ -29,10 +29,51 @@ describe("UserController", () => {
             expect(json.args[0][0].message).to.equal("Invalid Params");
         });
 
-        // it("Should not register a user when username param is not provied",
-        // async () => {
+        it("Should not register a user when username and email params is not provied",
+        async () => {
+            await new UserController().register(req, res);
+            expect(status.calledOnce).to.be.true;
+            expect(status.args[0][0]).to.equal(400);
+            expect(json.calledOnce).to.be.true;
+            expect(json.args[0][0].message).to.equal("Invalid Params");
+        });
+
+        it("Should not register a user when email param is not provied",
+        async () => {
+            req = { body: {username: faker.internet.userName() } };
+            await new UserController().register(req, res);
+            expect(status.calledOnce).to.be.true;
+            expect(status.args[0][0]).to.equal(400);
+            expect(json.calledOnce).to.be.true;
+            expect(json.args[0][0].message).to.equal("Invalid Params");
+        });
+
+        it("Should register a user when email and username params are provided",
+        async () => {
+            req = {
+                body: {
+                    username: faker.internet.userName(),
+                    email: faker.internet.email(),
+                    password: faker.internet.password()
+                }
+            };
+
+            const stubValue = {
+                id: faker.random.uuid(),
+                username: faker.internet.userName(),
+                email: faker.internet.email(),
+                password: faker.internet.password()
+            };
+            const stub = sinon.stub(userService, "create").returns(stubValue);
+            userControler = new UserController(userService);
+            const user = await userControler.register(req, res);
             
-        // });
+            expect(stub.calledOnce).to.be.true;
+            expect(status.calledOnce).to.be.true;
+            expect(status.args[0][0]).to.equal(201);
+            expect(json.calledOnce).to.be.true;
+            expect(json.args[0][0].data).to.equal(stubValue);
+        });
     });
 
     describe("getUser", async () => {
