@@ -8,17 +8,39 @@ const isAuth = require('./middleware/is-auth');
 const userRoutes = require('./routes/user');
 const bookRoutes = require('./routes/books');
 
-app.use(morgan('dev'));
-app.use('/upload', express.static('upload'));
-app.use(express.static(__dirname + '/public'));
+// Redis connect:
+// ===========================================================================
+const { Client } = require('./cache/Redis');
+
+Client.on('connect', () => {
+    console.log("Redis connected success!");
+});
+
+Client.on('reconnecting', () => {
+    console.log("Redis reconnected success!");
+});
+
+Client.on('error', () => {
+    console.log(`Error: ${err}`);
+});
+
+// Client.set('getName', "Hoang Duy");
+// Client.get('getName', (err, name) => {
+//     console.log(name);
+// })
+
+// ===========================================================================
+
+// app.use(morgan('dev'));
+// app.use('/upload', express.static('upload'));
+// app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 // GraphQL
 // ===========================================================================
-const graphiqlHttp = require('express-graphql');
-const graphQlSchema = require('./graphql/schema/indexSchema');
-const graphQlResolver = require('./graphql/resolvers/indexResolver');
+const graphqlHTTP = require('express-graphql');
+const RootSchema = require('./POSGraphql/schemas/SchemaRoot');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -30,13 +52,13 @@ app.use((req, res, next) => {
     next();
 });
 
+
 app.use(isAuth);
 app.use('/graphql',
-    graphiqlHttp({
-        schema: graphQlSchema,
-        rootValue: graphQlResolver,
+    graphqlHTTP(async(request, response, graphQLParams) => ({
+        schema: RootSchema,
         graphiql: true
-    })
+    }))
 );
 // ===========================================================================
 
