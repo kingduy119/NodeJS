@@ -1,4 +1,3 @@
-import { typeIncompatibleAnonSpreadMessage } from "graphql/validation/rules/PossibleFragmentSpreads";
 
 // Mediator Design Pattern -> https://youtu.be/ZuhgOu-DGA4
 
@@ -31,9 +30,21 @@ Chatroom.prototype = {
     }
 }
 
+// Execute:
+const chat = new Chatroom();
+
+const bob = new Member("Bob");
+const john = new Member("John");
+const tim = new Member("Tim");
 
 
+chat.addMember(bob);
+chat.addMember(john);
+chat.addMember(tim);
 
+bob.send("Hey, John", john);
+john.send("What's up, Bob", bob);
+tim.send("John, are you ok?", john);
 
 
 
