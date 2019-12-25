@@ -1,26 +1,26 @@
-const Singleton = (function(){
-    function ProcessManager() {
-      this.numProcess = 0;
+class Database {
+  constructor(data) {
+    if (Database.exists) {
+      return Database.instance;
     }
-    
-    let pManager;
-    
-    function createProcessManager() {
-      pManager = new ProcessManager();
-      return pManager;
-    }
-    
-    return {
-      gerProcessManager:()=>{
-        if(!pManager)
-          pManager = createProcessManager();
-        return pManager;
-      }
-    };
-  })()
-  
-  const procress = Singleton.gerProcessManager();
-  const procress1 = Singleton.gerProcessManager();
-  
-  
-  console.log(procress === procress1);
+    this._data = data;
+    Database.instance = this;
+    Database.exists = true;
+    return this;
+  }
+
+  getData() {
+    return this._data;
+  }
+
+  setData(data) {
+    this._data = data;
+  }
+}
+
+// usage
+const mongo = new Database('mongo');
+console.log(mongo.getData()); // mongo
+
+const mysql = new Database('mysql');
+console.log(mysql.getData()); // mongo
