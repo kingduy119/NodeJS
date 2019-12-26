@@ -5,16 +5,24 @@ class UserRepository {
         this.user = UserModel;
     }
 
-    async create(username, email, password) {
-        return this.user.create({
-            username,
-            email,
-            password
-        });
+    async create(user) {
+        return await this.user.create(user);
     }
 
-    async getUser(username) {
-        return this.findOne({username});
+    async _findOne(user) {
+        return await this.user.findOne(user);
+    }
+
+    async _findAll() {
+        return await this.user.find();
+    }
+
+    async _updateOne(user) {
+        return await this.user.updateOne(user);
+    }
+
+    async _deleteOne(user) {
+        return await this.user.deleteOne(user);
     }
 }
 

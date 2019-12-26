@@ -1,27 +1,40 @@
+const UserService = require('./user.service');
+
 class UserController {
-    constructor(userService) {
-        this.userService = userService;
+    constructor() {
+        if(UserController.exists) return UserController.instance;
+
+        this.userService = new UserService();
+        UserController.instance = this;
+        UserController.exists = true;
+        return this;
     }
 
-    async register(req, res, next) {
-        const {username , email, password } = req.body;
-
-        if(!username ||
-            typeof username !== "string" ||
+    register(user) {
+        const { username, email, password } = user;
+        if((!username || typeof username !== "string")
+            ||
             (!email || typeof email !== "string")
-        ) {
-            return res.status(400).json({
-                message: "Invalid Params"
-            });
-        }
+        ) { return ({message: "Invalid Params"}); }
 
-        const user = await this.userService.create(username, email, password);
-        return res.status(201).json({data: user});
+        return this.userService.create(username, email, password);
     }
 
-    async getUser(req, res) {
-        const { username } = req.params;
-        const user = await this.userService.getUser(username);
-        return res.json({ data: user });
+    _findOne(user) {
+        return this.userService._findOne(user);
+    }
+
+    _findAll() {
+        return this.userService._findAll();
+    }
+
+    _updateOne(user) {
+        return this.userService.updateOne(user);
+    }
+
+    _deleteOne(user) {
+        return this.userService.deleteOne(user);
     }
 }
+
+module.exports = new UserController();

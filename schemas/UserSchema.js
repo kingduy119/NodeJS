@@ -12,9 +12,7 @@ const {
     GraphQLDate
 } = require('graphql-iso-date');
 
-const ModelUser = require('../models/ModelUser');
-
-const { Client } = require('../../cache/Redis');
+const UserController = require('../controllers/user/user.controller');
 
 // User Type:
 const UserType = new GraphQLObjectType({
@@ -31,14 +29,7 @@ exports.UserQuery = {
     Users: {
         type: new GraphQLList(UserType),
         resolve: async (parent, args) => {
-            Client.get('users', (err, data) => {
-                if(err) console.log(err);
-                if(data) return data;
-            })
-
-            const data = await ModelUser.find();
-            Client.setex('users', 3600, JSON.stringify(data));
-            return data;
+            return await UserController._findAll();
         }
     },
     User: {
@@ -47,7 +38,7 @@ exports.UserQuery = {
             username: {type: new GraphQLNonNull(GraphQLString)}
         },
         resolve: async (parent, args) => {
-            return await ModelUser.findOne({username: args.username});
+            return await UserController._findOne({username: args.username});
         }
     }
 }
@@ -61,39 +52,35 @@ exports.UserMutation = {
             password:{type: new GraphQLNonNull(GraphQLString)}
         },
         resolve: async (parent, args) => {
-            return ModelUser.create({
-                username: args.username,
-                email: args.email,
-                password: args.password
-            });
+            return await UserController._create(args);
         }
     }
 }
 
-exports.updateOne = {
-    type: UserType,
-    args: {
-        id: {type: new GraphQLNonNull(GraphQLID)},
-        username: {type: new GraphQLNonNull(GraphQLString)},
-        email: {type: new GraphQLNonNull(GraphQLString)},
-        password: {type: new GraphQLNonNull(GraphQLString)}
-    },
-    resolve: async (parent, args) => {
-        let user = await ModelUser.updateOne({_id: args.id},{
-            username: args.username,
-            email: args.email,
-            password: args.password
-        });
-        return ModelUser.findById({_id: args.id});
-    }
-}
+// exports.updateOne = {
+//     type: UserType,
+//     args: {
+//         id: {type: new GraphQLNonNull(GraphQLID)},
+//         username: {type: new GraphQLNonNull(GraphQLString)},
+//         email: {type: new GraphQLNonNull(GraphQLString)},
+//         password: {type: new GraphQLNonNull(GraphQLString)}
+//     },
+//     resolve: async (parent, args) => {
+//         let user = await ModelUser.updateOne({_id: args.id},{
+//             username: args.username,
+//             email: args.email,
+//             password: args.password
+//         });
+//         return ModelUser.findById({_id: args.id});
+//     }
+// }
 
-exports.deleteOnce = {
-    type: UserType,
-    args: {
-        username: {type: new GraphQLNonNull(GraphQLString)}
-    },
-    resolve: async (parent, args) => {
-        return await ModelUser.deleteOne({username: args.username});
-    }
-}
+// exports.deleteOnce = {
+//     type: UserType,
+//     args: {
+//         username: {type: new GraphQLNonNull(GraphQLString)}
+//     },
+//     resolve: async (parent, args) => {
+//         return await ModelUser.deleteOne({username: args.username});
+//     }
+// }

@@ -1,16 +1,28 @@
 const UserRepository = require('./user.repository');
 
 class UserService {
-    constructor(userRepository) {
-        this.userRepository = userRepository;
+    constructor() {
+        this.userRepository = new UserRepository();
     }
 
-    async create(username, email, password) {
-        return this.userRepository.create(username, email, password);
+    _create(username, email, password) {
+        return this.userRepository._create({username, email, password});
     }
 
-    async getUser(username) {
-        return this.userRepository.getUser(username);
+    _findOne(user) {
+        return this.userRepository._findOne(user);
+    }
+
+    _findAll() {
+        return this.userRepository._findAll();
+    }
+
+    _updateOne(user) {
+        return this.userRepository.updateOne(user);
+    }
+
+    _deleteOne(user) {
+        return this.userRepository.deleteOne(user);
     }
 }
 

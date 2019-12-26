@@ -4,8 +4,7 @@ const {
 } = require('graphql');
 
 // Schemas
-const ItemSchema = require('./ItemSchema');
-const {UserQuery, UserMutation} = require('../schemas/UserSchema');
+const {UserQuery, UserMutation} = require('./UserSchema');
 
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
