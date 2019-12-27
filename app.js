@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const app = express();
 const path = require('path');
 const morgan = require('morgan');
@@ -10,27 +11,23 @@ const bookRoutes = require('./routes/books');
 
 // Redis connect:
 // ===========================================================================
-const { Client } = require('./cache/Redis');
+const Redis = require('./cache/Redis');
 
-Client.on('connect', () => {
+Redis.getClient().on('connect', () => {
     console.log("Redis connected success!");
 });
 
-Client.on('reconnecting', () => {
+Redis.getClient().on('reconnecting', () => {
     console.log("Redis reconnected success!");
 });
 
-Client.on('error', () => {
+Redis.getClient().on('error', () => {
     console.log(`Error: ${err}`);
 });
 
-// Client.set('getName', "Hoang Duy");
-// Client.get('getName', (err, name) => {
-//     console.log(name);
-// })
-
 // ===========================================================================
 
+app.use(helmet());
 // app.use(morgan('dev'));
 // app.use('/upload', express.static('upload'));
 // app.use(express.static(__dirname + '/public'));
@@ -40,17 +37,17 @@ app.use(bodyParser.json());
 // GraphQL
 // ===========================================================================
 const graphqlHTTP = require('express-graphql');
-const RootSchema = require('./POSGraphql/schemas/SchemaRoot');
+const RootSchema = require('./schemas/SchemaRoot');
 
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    if(req.method === 'OPTIONS') {
-        return res.sendStatus(200);
-    }
-    next();
-});
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     if(req.method === 'OPTIONS') {
+//         return res.sendStatus(200);
+//     }
+//     next();
+// });
 
 
 app.use(isAuth);

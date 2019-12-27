@@ -1,16 +1,23 @@
 const UserModel = require('../../database/models/UserModel');
+const Client = require('../../cache/Redis').getClient();
 
 class UserRepository {
     constructor() {
         this.user = UserModel;
     }
 
-    async create(user) {
+    async _create(user) {
         return await this.user.create(user);
     }
 
     async _findOne(user) {
-        return await this.user.findOne(user);
+        Client.get(user.username, (err, data) => {
+            if(data){ return data; }
+        });
+
+        let data = await this.user.findOne(user);
+        Client.setex(user.username, 3600, JSON.stringify(data));
+        return data;
     }
 
     async _findAll() {

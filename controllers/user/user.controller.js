@@ -10,12 +10,12 @@ class UserController {
         return this;
     }
 
-    register(user) {
+    _create(user) {
         const { username, email, password } = user;
         if((!username || typeof username !== "string")
             ||
             (!email || typeof email !== "string")
-        ) { return ({message: "Invalid Params"}); }
+        ) { return ({data: "Invalid Params"}); }
 
         return this.userService.create(username, email, password);
     }

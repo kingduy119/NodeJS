@@ -1,4 +1,5 @@
 const UserRepository = require('./user.repository');
+const Client = require('../../cache/Redis').getClient();
 
 class UserService {
     constructor() {
@@ -9,7 +10,7 @@ class UserService {
         return this.userRepository._create({username, email, password});
     }
 
-    _findOne(user) {
+    _findOne(user) {        
         return this.userRepository._findOne(user);
     }
 

@@ -1,7 +1,6 @@
 const Redis = require('redis');
 const bluebird = require('bluebird');
-bluebird.promisifyAll(Redis.RedisClient.prototype);
-bluebird.promisifyAll(Redis.Multi.prototype);
+
 const Client = Redis.createClient({
     retry_strategy: function (options) {
         if (options.error && options.error.code === 'ECONNREFUSED') {
@@ -24,8 +23,26 @@ const Client = Redis.createClient({
     detect_buffers: true
 });
 
-module.exports = {
-    Redis,
-    Client
-};
+class RedisController {
+    constructor() {
+        if(RedisController.exists) {
+            console.log("Redis exists");
+            return RedisController.instance
+        };
+        console.log("Redis not exists");
+        this.redis = Redis;
+        this.client = Client;
+        bluebird.promisifyAll(Redis.RedisClient.prototype);
+        bluebird.promisifyAll(Redis.Multi.prototype);
+        RedisController.instance = this;
+        RedisController.exists = true;
+        return this;
+    }
+
+    getClient() { return this.client; }
+
+    getRedis() { return this.redis; }
+}
+const redis = new RedisController();
+module.exports = redis;
 

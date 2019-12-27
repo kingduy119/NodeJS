@@ -20,6 +20,7 @@
   "dependencies": {
     "async": "^3.1.0",
     "bcrypt": "^3.0.6",
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "express": "^4.17.1",
@@ -27,6 +28,7 @@
     "faker": "^4.1.0",
     "graphql": "^14.5.8",
     "graphql-iso-date": "^3.6.1",
+    "helmet": "^3.21.2",
     "jade": "^1.11.0",
     "jest": "^24.9.0",
     "jsonwebtoken": "^8.5.1",
@@ -35,6 +37,7 @@
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
     "nodemon": "^1.19.3",
+    "redis": "^2.8.0",
     "sinon": "^7.5.0",
     "socket.io": "^2.3.0",
     "supertest": "^4.0.2"
