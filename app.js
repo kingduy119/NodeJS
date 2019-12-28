@@ -6,9 +6,6 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const isAuth = require('./middleware/is-auth');
 
-const userRoutes = require('./routes/user');
-const bookRoutes = require('./routes/books');
-
 // Redis connect:
 // ===========================================================================
 const Redis = require('./cache/Redis');
@@ -62,11 +59,6 @@ app.use('/graphql',
 // Set up:
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
-// Router handle:
-app.use('/user', userRoutes);
-app.use('/book', bookRoutes);
-
 
 // Handle error:
 // ===========================================================================

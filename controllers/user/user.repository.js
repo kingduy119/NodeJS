@@ -11,13 +11,7 @@ class UserRepository {
     }
 
     async _findOne(user) {
-        Client.get(user.username, (err, data) => {
-            if(data){ return data; }
-        });
-
-        let data = await this.user.findOne(user);
-        Client.setex(user.username, 3600, JSON.stringify(data));
-        return data;
+        return await this.user.findOne(user);
     }
 
     async _findAll() {

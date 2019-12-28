@@ -1,4 +1,5 @@
 const UserService = require('./user.service');
+const bcryptjs = require('bcryptjs');
 
 class UserController {
     constructor() {
@@ -10,17 +11,31 @@ class UserController {
         return this;
     }
 
-    _create(user) {
+    Signup(user) {
+        let oldUser = this.userService._findOne(user);
+        console.log(oldUser);
+        if(oldUser) { return {data: "User exists"}; }
+
+        console.log("Check invalid");
         const { username, email, password } = user;
         if((!username || typeof username !== "string")
             ||
             (!email || typeof email !== "string")
-        ) { return ({data: "Invalid Params"}); }
+            ||
+            (!password || typeof password !== "string")
+        ) { console.log("Invalid Params");
+            return ({data: "Invalid Params"}); }
 
-        return this.userService.create(username, email, password);
+        bcryptjs.hash(password, 10, (err, hash) => {
+            if(err) console.log(err);
+            else {
+                console.log("Created user");
+                return this.userService._create(username, email, hash);
+            }
+    });
     }
 
-    _findOne(user) {
+    Login(user) {
         return this.userService._findOne(user);
     }
 
@@ -28,12 +43,12 @@ class UserController {
         return this.userService._findAll();
     }
 
-    _updateOne(user) {
-        return this.userService.updateOne(user);
+    ChangeInfo(user) {
+        return this.userService._updateOne(user);
     }
 
-    _deleteOne(user) {
-        return this.userService.deleteOne(user);
+    Delete(user) {
+        return this.userService._deleteOne(user);
     }
 }
 

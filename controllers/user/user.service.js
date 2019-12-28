@@ -10,8 +10,15 @@ class UserService {
         return this.userRepository._create({username, email, password});
     }
 
-    _findOne(user) {        
-        return this.userRepository._findOne(user);
+    _findOne(user) {
+        console.log(user);
+        Client.get(user.username, (err, data) => {
+            if(data){ return data; }
+        });
+
+        let data = this.userRepository._findOne(user);
+        Client.setex(user.username, 3600, JSON.stringify(data));
+        return data;
     }
 
     _findAll() {
@@ -19,11 +26,11 @@ class UserService {
     }
 
     _updateOne(user) {
-        return this.userRepository.updateOne(user);
+        return this.userRepository._updateOne(user);
     }
 
     _deleteOne(user) {
-        return this.userRepository.deleteOne(user);
+        return this.userRepository._deleteOne(user);
     }
 }
 
