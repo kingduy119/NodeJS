@@ -11,10 +11,10 @@ class UserController {
         return this;
     }
 
-    Signup(user) {
-        let oldUser = this.userService._findOne(user);
-        console.log(oldUser);
-        if(oldUser) { return {data: "User exists"}; }
+    async Signup(user) {
+        // let oldUser = this.userService._findOne(user);
+        // console.log(oldUser);
+        // if(oldUser) { return new Error("User existed!"); }
 
         console.log("Check invalid");
         const { username, email, password } = user;
@@ -26,13 +26,9 @@ class UserController {
         ) { console.log("Invalid Params");
             return ({data: "Invalid Params"}); }
 
-        bcryptjs.hash(password, 10, (err, hash) => {
-            if(err) console.log(err);
-            else {
-                console.log("Created user");
-                return this.userService._create(username, email, hash);
-            }
-    });
+        let hashpwd = await bcryptjs.hash(password, 10);
+        user.password = hashpwd;
+        return this.userService._create(user);
     }
 
     Login(user) {
