@@ -184,9 +184,9 @@ class UserPage extends Component {
 
     findUser = () => {
         const username = this.readUsername.current.value;
-        if(user.trim().length === 0) return;
+        if(username.trim().length === 0) return;
 
-        requestBody = {
+        let requestBody = {
             query:`
                 query {
                     FindUsername(username: "${username}") {
@@ -262,12 +262,12 @@ class UserPage extends Component {
                                     <button
                                         type="button"
                                         className="btn btn-light mb-2 mr-sm-2"
-                                        onClick={}
+                                        // onClick={}
                                     >Find</button>
                                     <button
                                         type="button"
                                         className="btn btn-light mb-2 mr-sm-2"
-                                        onClick={}
+                                        // onClick={}
                                     >List
                                     </button>
                                 </div>
