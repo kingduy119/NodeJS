@@ -1,8 +1,6 @@
 {
     "preset": [
-        ["@babel/env", {
-            "modules": false
-        }]
+        ["@babel/preset-env, "@babel/preset-react]
     ],
     "plugins": ["syntax-dynamic-import"]
 }
