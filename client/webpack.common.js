@@ -4,8 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: './src/aapp.js',
-        chat: './src/chat.js'
+        app: './src/WebpackApp.js'
     },
     output: {
         filename: '[name].bundle.js',
@@ -14,22 +13,12 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 exclude: /(node_modules|bower_components)/,
                 use: [{
                     loader: 'babel-loader'
                 }]
             },
-            // {
-            //     test: /\.scss$/,
-            //     use: [{
-            //         loader: 'style-loader'
-            //     },{
-            //         loader: 'css-loader'
-            //     },{
-            //         loader: 'sass-loader'
-            //     }]
-            // },
             {
                 test: /\.(png|svg|jpg|gif)$/,
                 use:[{
