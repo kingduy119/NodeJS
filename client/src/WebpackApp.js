@@ -1,9 +1,11 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 
 import FormContainer from './components/containers/FormContainer.jsx';
 
 
-
+ReactDOM.render(<FormContainer/>, document.getElementById("create-article-form"));
 
 
 

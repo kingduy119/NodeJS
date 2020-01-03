@@ -14,16 +14,28 @@ module.exports = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
-                exclude: /(node_modules|bower_components)/,
-                use: [{
-                    loader: 'babel-loader'
-                }]
+                exclude: /(node_modules)/,
+                use: [
+                    {
+                        loader: 'babel-loader'
+                    }
+                ]
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,
-                use:[{
-                    loader: 'file-loader'
-                }]
+                use:[
+                    {
+                        loader: 'file-loader'
+                    }
+                ]
+            },
+            {
+                test: /\.html$/,
+                use: [
+                    {
+                        loader: 'html-loader'
+                    }
+                ]
             }
         ]
     },
@@ -32,6 +44,7 @@ module.exports = {
             cleanOnceBeforeBuildPatterns: 'dist'
         }),
         new HtmlWebpackPlugin({
+            template: './src/index.html',
             title: 'My killer app'
         })
     ]
