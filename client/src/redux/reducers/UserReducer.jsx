@@ -1,4 +1,6 @@
-const UserReducer = (state = {}, action) => {
+
+
+function UserReducer(state = [], action){
     switch(action.type) {
         case "SET_NAME":
             state = {
