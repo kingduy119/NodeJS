@@ -15,8 +15,7 @@ function selectedSubreddit(state = 'react.js', action) {
     }
 }
 
-
-function post(
+function posts(
     state = {
         isFetching: false,
         didInvalidate: false,
@@ -46,7 +45,7 @@ function post(
     }
 }
 
-function postsBySubreddit(state ={}, action) {
+function postsBySubreddit(state = {}, action) {
     switch(action.type) {
         case INVALIDATE_SUBREDDIT:
         case RECEIVE_POSTS:
