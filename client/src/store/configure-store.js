@@ -14,10 +14,11 @@ import visibilityFilter from './reducers/visibility-filter';
 // const enhancers = [middlewareEnhancer];
 
 const store = createStore(
-    combineReducers(
-        todos,
-        visibilityFilter
-    )
+    // combineReducers(
+    //     todos
+    //     ,visibilityFilter
+    // )
+    todos
 );
 
 

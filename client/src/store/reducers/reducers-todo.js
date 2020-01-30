@@ -1,18 +1,28 @@
-import { TypesActions } from '../actions/actions-todo';
+import { TypesActions, VisibilityFilters } from '../actions/actions-todo';
 
-const todos = (state = [], action) => {
+const initState = {
+    filter: VisibilityFilters.SHOW_ALL,
+    todos: []
+}
+
+const todos = (
+        state = initState,
+        action
+    ) => {
     switch(action.type) {
         case TypesActions.ADD_TODO:
+            console.log(state);
+            console.log(action);
             return [
-                ...state,
+                ...state.todos,
                 {
                     id: action.id,
                     text: action.text,
                     completed: false
                 }
-            ];
+            ]
         case TypesActions.TOGGLE_TODO:
-            return state.map(todo => 
+            return state.todos.map(todo => 
                 todo.id === action.id ?
                 {...todo, completed: !todo.completed } : todo
             );
