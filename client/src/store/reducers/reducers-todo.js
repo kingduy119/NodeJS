@@ -11,21 +11,29 @@ const todos = (
     ) => {
     switch(action.type) {
         case TypesActions.ADD_TODO:
-            console.log(state);
-            console.log(action);
-            return [
-                ...state.todos,
-                {
-                    id: action.id,
-                    text: action.text,
-                    completed: false
-                }
-            ]
+            // console.log(state);
+            // console.log(action);
+            return Object.assign({}, state, {
+                todos: [
+                    ...state.todos,
+                    {
+                        id: action.id,
+                        text: action.text,
+                        completed: false
+                    }
+                ]
+            })
         case TypesActions.TOGGLE_TODO:
-            return state.todos.map(todo => 
-                todo.id === action.id ?
-                {...todo, completed: !todo.completed } : todo
-            );
+            return Object.assign({}, state, {
+                todos: state.todos.map((todo, index) => {
+                    if(index === action.id)
+                        return Object.assign({}, todo, {
+                            completed: !todo.completed
+                        });
+                    else
+                     return todo;
+                })
+            });
         default:
             return state;
     }
