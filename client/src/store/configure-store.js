@@ -1,24 +1,18 @@
 import {
     createStore,
-    combineReducers
+    applyMiddleware
 } from 'redux';
 
-// import thunkMiddleware from 'redux-thunk';
-// import loggerMiddleware from 'redux-logger';
-
-import todos from './reducers/reducers-todo';
-import visibilityFilter from './reducers/visibility-filter';
-
-// const middlewares = [thunkMiddleware, loggerMiddleware];
-// const middlewareEnhancer = applyMiddleware(...middlewares);
-// const enhancers = [middlewareEnhancer];
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
+import promise from 'redux-promise-middleware';
+import reducers from './reducers/root-reducers';
 
 const store = createStore(
-    // combineReducers(
-    //     todos
-    //     ,visibilityFilter
-    // )
-    todos
+    reducers
+    // reducers,
+    // {},
+    // applyMiddleware(logger, thunk, promise)
 );
 
 

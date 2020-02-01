@@ -1,18 +1,14 @@
 import { TypesActions, VisibilityFilters } from '../actions/actions-todo';
 
-const initState = {
-    filter: VisibilityFilters.SHOW_ALL,
-    todos: []
-}
-
 const todos = (
-        state = initState,
-        action
-    ) => {
+    state = {
+        filter: VisibilityFilters.SHOW_ALL,
+        todos: []
+    },
+    action
+) => {
     switch(action.type) {
         case TypesActions.ADD_TODO:
-            // console.log(state);
-            // console.log(action);
             return Object.assign({}, state, {
                 todos: [
                     ...state.todos,
@@ -22,7 +18,7 @@ const todos = (
                         completed: false
                     }
                 ]
-            })
+            });
         case TypesActions.TOGGLE_TODO:
             return Object.assign({}, state, {
                 todos: state.todos.map((todo, index) => {
@@ -31,9 +27,14 @@ const todos = (
                             completed: !todo.completed
                         });
                     else
-                     return todo;
+                        return todo;
                 })
             });
+        // case TypesActions.SET_VISIBILITY_FILTER:
+        //     if(state.filter !== action.filter)
+        //         state =  Object.assign({}, state, {filter: action.filter});
+        //     console.log(state);
+        //     return state;
         default:
             return state;
     }
