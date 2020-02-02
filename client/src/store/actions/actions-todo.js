@@ -1,5 +1,5 @@
 
-import fetch from 'cross-fetch';
+// import fetch from 'cross-fetch';
 
 let nextTodoId = 0;
 
@@ -78,21 +78,26 @@ function fetchPosts(subreddit) {
     //     `};
     return dispatch => {
         dispatch(requestPosts(subreddit));
-        return fetch(`https://localhost:1000/graphql`
+        // return fetch(`https://localhost:1000/graphql`
         // , {
         //     method: 'POST',
         //     body: JSON.stringify(requestBody),
         //     headers: {
         //         'Content-Type': 'application/json'
         //     }}
-        )
-            .then(response => response.json())
-            .then(json => dispatch(receivePosts(subreddit, json)));
+        // )
+            // .then(response => response.json())
+            // .then(json => dispatch(receivePosts(subreddit, json)));
     };
 }
 
-function shouldFetchPosts(state, subreddit) {
-    const posts = state.postsBySubreddit[subreddit];
+const sub = {
+    isFetching: false,
+    didInvalidate: false
+};
+
+function shouldFetchPosts(state = {}, subreddit) {
+    const posts = state.postsBySubreddit;
     if(!posts) {
         return true;
     } else if (posts.isFetching) {

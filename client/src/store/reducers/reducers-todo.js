@@ -47,6 +47,11 @@ const todos = (
             return state;
 
         // #Posts-reducers:
+        case SELECT_SUBREDDIT:
+            return Object.assign({}, state, {
+                selectSubreddit: action.subreddit
+            });
+
         case INVALIDATE_SUBREDDIT:
         case RECEIVE_POSTS:
         case REQUEST_POSTS:
