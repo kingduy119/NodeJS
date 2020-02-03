@@ -4,14 +4,21 @@ import {
     combineReducers
 } from 'redux';
 
-import logger from 'redux-logger';
-import thunk from 'redux-thunk';
+import { createLogger } from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
 import promise from 'redux-promise-middleware';
 import reducers from './reducers/root-reducers';
 
+const loggerMiddleware = createLogger()
 
-export default createStore(
-    reducers,
-    undefined,
-    applyMiddleware(thunk)
-);
+export default function configureStore(proloadState) {
+    return createStore(
+        reducers,
+        proloadState,
+        applyMiddleware(
+            thunkMiddleware,
+            loggerMiddleware
+        )
+    );
+}
+

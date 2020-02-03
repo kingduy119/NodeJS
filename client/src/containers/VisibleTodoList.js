@@ -5,8 +5,8 @@ import {
 } from '../store/actions/actions-todo';
 import TodoList from '../components/TodoList';
 
-const getVisibleTodos = (todos, filter) => {
-    console.log(todos);
+const getVisibleTodos = (todos = [], filter) => {
+    console.log("DUY " + todos + " Filter " + filter);
     switch(filter) {
         case VisibilityFilters.SHOW_ALL:
             return todos;
@@ -14,8 +14,7 @@ const getVisibleTodos = (todos, filter) => {
             return todos.filter(t => t.completed);
         case VisibilityFilters.SHOW_ACTIVE:
             return todos.filter(t => !t.completed);
-        default:
-            throw 'Unknow filter: ' + filter;
+        
     }
 }
 

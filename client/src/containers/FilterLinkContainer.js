@@ -6,7 +6,7 @@ import {
 import Link from '../components/Link';
 
 const mapStateToProps = (state, ownProps) => ({
-    active: false
+    active: state.filter === ownProps.filter
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
