@@ -11,10 +11,10 @@ import reducers from './reducers/root-reducers';
 
 const loggerMiddleware = createLogger()
 
-export default function configureStore(proloadState) {
+export default function configureStore(preloadState) {
     return createStore(
         reducers,
-        proloadState,
+        preloadState,
         applyMiddleware(
             thunkMiddleware,
             loggerMiddleware

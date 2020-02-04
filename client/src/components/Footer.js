@@ -1,5 +1,6 @@
 import React from 'react';
-import FilterLink from '../containers/FilterLinkContainer';
+//import FilterLink from '../containers/FilterLinkContainer';
+import FilterLink from '../components/FilterLink';
 import {
     VisibilityFilters
 } from '../store/actions/actions-todo';
