@@ -3,6 +3,8 @@ import { render } from 'react-dom';
 import Root from './components/Root';
 import * as serviceWorker from './serviceWorker';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 render(
     <Root/>
     ,document.getElementById('root'));
