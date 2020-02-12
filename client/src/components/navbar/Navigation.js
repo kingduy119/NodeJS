@@ -7,8 +7,11 @@ import {
     Switch,
     Route,
     Link,
+    Redirect,
     useRouteMatch,
-    useParams
+    useParams,
+    useHistory,
+    useLocation
 } from 'react-router-dom';
 
 import {
@@ -34,24 +37,38 @@ const Navigation = () => {
             </Nav.Item>
 
             <Nav.Item>
-                <Nav.Link href="/about">About</Nav.Link>
+                <Nav.Link href="/old-match">Old Match, tobe redirected</Nav.Link>
             </Nav.Item>
 
             <Nav.Item>
-                <Nav.Link href="/topics">Topics</Nav.Link>
+                <Nav.Link href="/will-match">Will Match</Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+                <Nav.Link href="/will-not-match">Will Not Match</Nav.Link>
+            </Nav.Item>
+
+            <Nav.Item>
+                <Nav.Link href="/also/will/not/match" >Alse Will Not Match</Nav.Link>
             </Nav.Item>
         </Nav>
     </Navbar>
-    {
+    { // **************************************************************************
         <Switch>
             <Route path="/home">
                 <Home/>
             </Route>
-            <Route path="/about">
-                <About/>
+
+            <Route path="/old-match">
+                <Redirect to="/will-match" />
             </Route>
-            <Route path="/topics">
-                <Topics/>
+
+            <Route path="/will-match">
+                <WillMatch />
+            </Route>
+
+            <Route path="*">
+                <NoMatch/>
             </Route>
         </Switch>
     }
@@ -59,43 +76,18 @@ const Navigation = () => {
     );
 }
 
-function Home() {
-    return <h2>Home</h2>;
-}
-function About() {
-    return <h2>About</h2>;
-}
-function Topics() {
-    let {path, url} = useRouteMatch();
-    return(
+function Home() { return <h2>Home</h2>; }
+function WillMatch() { return <h2>Will Match</h2> }
+function NoMatch() {
+    let location = useLocation();
+
+    return (
         <div>
-            <h2>Topics</h2>
-            <Nav>
-                <Nav.Item>
-                    <Nav.Link href={`${url}/components`}>Components</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link href={`${url}/props-v-state`}>Props v. State</Nav.Link>
-                </Nav.Item>
-            </Nav>
-            {
-                <Switch>
-                    <Route exact path={path}>
-                        <h3>Please select a topic.</h3>
-                    </Route>
-                    <Route path={`${path}/:topicId`}>
-                        <Topic />
-                    </Route>
-                </Switch>
-            }
+            <h3>
+                No match for <code>{location.pathname}</code>
+            </h3>
         </div>
     );
-}
-
-function Topic() {
-    let { topicId } = useParams();
-    console.log("Topic: " + topicId);
-    return <h3>Request topic ID: {topicId}</h3>;
 }
 
 export default Navigation;
