@@ -9,9 +9,7 @@ import {
     Link,
     NavLink,
     useRouteMatch,
-    useParams,
-    useHistory,
-    useLocation
+    useParams
 } from 'react-router-dom';
 
 import {
