@@ -75,8 +75,15 @@ function RouteConfig() {
     return(
     <div>
         <ul>
-            <NavLink to="/tacos">Tacos</NavLink>
-            <NavLink to="/sandwiches">Sandwiches</NavLink>
+            <li>
+                <Link to="/tacos">Tacos</Link>
+            </li>
+            <li>
+                <Link to="/sandwiches">Sandwiches</Link>
+            </li>
+            <li>
+                <Link to="/queryparams">Query Params</Link>
+            </li>
         </ul>
 
         <Switch>

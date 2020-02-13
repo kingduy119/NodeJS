@@ -2,8 +2,10 @@ import React from 'react';
 import {
     Switch,
     Route,
-    NavLink
+    Link
 } from 'react-router-dom';
+
+import QueryParamsRouter from './router-query-params';
 
 export function RouteWithSubRoute(route) {
     return (
@@ -25,8 +27,12 @@ function Tacos({ routes }) {
         <div>
             <h2>Tacos</h2>
             <ul>
-                <NavLink to="/tacos/bus">Bus</NavLink>
-                <NavLink to="/tacos/cart">cart</NavLink>
+                <li>
+                    <Link to="/tacos/bus">Bus</Link>
+                </li>
+                <li>
+                    <Link to="/tacos/cart">cart</Link>
+                </li>
             </ul>
 
             <Switch>
@@ -68,5 +74,9 @@ export const routesConfig = [
                 component: Cart
             }
         ]
+    },
+    {
+        path: "/queryparams",
+        component: QueryParamsRouter
     }
 ];
