@@ -19,10 +19,13 @@ import {
     Button
 } from "react-bootstrap";
 
+import Home from "./page/Home";
+import NameForm from "./page/Form";
+
 const navConfig = {
     links: [
-        { path: "/home", text: "Home", component: <h2>Home Page</h2>},
-        { path: "/features", text: "Features", component: <h2>Features Page</h2>},
+        { path: "/home", text: "Home", component: <Home/> },
+        { path: "/form", text: "Form", component: <NameForm/>},
         { path: "/pricing", text: "Pricing", component: <h2>Pricing Page</h2>}
     ],
     dropdown: {
