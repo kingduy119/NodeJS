@@ -1,29 +1,57 @@
 import React, {
     Component
 } from "react";
+
+import {
+    BrowserRouter,
+    Switch,
+    Route
+} from "react-router-dom";
+
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 
 import Form from "react-bootstrap/Form";
 import FormControl from "react-bootstrap/FormControl";
+
 import { 
-    Container,
-    Row,
-    Col,
     NavDropdown,
     Button
 } from "react-bootstrap";
 
-class Navigation extends Component {
+const navConfig = {
+    links: [
+        { path: "/home", text: "Home", component: <h2>Home Page</h2>},
+        { path: "/features", text: "Features", component: <h2>Features Page</h2>},
+        { path: "/pricing", text: "Pricing", component: <h2>Pricing Page</h2>}
+    ],
+    dropdown: {
+        title: "Dropdown",
+        links: [
+            { path: "/action/1-1", text: "Another Action" },
+            { path: "/action/1-2", text: "Something" },
+            { path: "/action/1-3", text: "Seperated Link" },
+            { path: "/action/1-4", text: "Other" }
+        ]
+    },
+    search: {
+        text: <FormControl type="text" placeholder="Search" className="mr-sm-2"/>,
+        button: <Button variant="outline-info">Search</Button>
+    }
+}
+
+export default class Navigation extends Component {
     constructor(props) {
         super(props);
 
     }
 
+    // <--- Links --->
     showLinks(links={}) {
         return links.map(item => (<Nav.Link href={item.path}>{item.text}</Nav.Link>))
     }
 
+    // <--- Dropdown --->
     showDropDown(dropdown) {
         return (
             <NavDropdown
@@ -32,13 +60,14 @@ class Navigation extends Component {
         >
             {dropdown.links.map(item => (
                 <NavDropdown.Item path={item.path} >
-                    item.text
+                    {item.text}
                 </NavDropdown.Item>
             ))}
         </NavDropdown>
         );
     }
 
+    // <--- Search --->
     showSearch(search){
         return ( 
             <Form inline>
@@ -53,7 +82,7 @@ class Navigation extends Component {
         <React.Fragment>
             <Navbar bg="dark" variant="dark" expand="lg">
 
-            <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+            <Navbar.Brand href="/home">Navbar</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
             <Navbar.Collapse>
@@ -70,30 +99,15 @@ class Navigation extends Component {
                 
             </Navbar.Collapse>
             </Navbar>
+
+            <Switch>
+                {navConfig.links.map(item => (
+                    <Route path={item.path}>
+                        {item.component}
+                    </Route>
+                ))}
+            </Switch>
         </React.Fragment>
         )
     }
 }
-
-const navConfig = {
-    links: [
-        { path: "/home", text: "Home"},
-        { path: "/features", text: "Features"},
-        { path: "/pricing", text: "Pricing"}
-    ],
-    dropdown: {
-        title: "Dropdown",
-        links: [
-            { path: "/action/1-1", text: "Another Action" },
-            { path: "/action/1-2", text: "Something" },
-            { path: "/action/1-3", text: "Seperated Link" },
-            { path: "/action/1-4", text: "Other" }
-        ]
-    },
-    search: {
-        text: (<FormControl type="text" placeholder="Search" className="mr-sm-2"/>),
-        button: (<Button variant="outline-info">Search</Button>)
-    }
-}
-
-export default Navigation;
