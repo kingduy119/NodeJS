@@ -23,13 +23,24 @@ import Home from "./page/Home";
 import NameForm from "./page/Form";
 import Temperature from "./page/Temperature";
 import Containment from "./page/Containment";
+import FilterableProductTable from "./page/FilterableProductTable.js";
+
+const PRODUCTS = [
+    {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+    {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+    {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+    {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+    {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+    {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+  ];
 
 const navConfig = {
     links: [
         { path: "/home", text: "Home", component: <Home/> },
         { path: "/form", text: "Form", component: <NameForm/>},
         { path: "/temperature", text: "Temperature", component: <Temperature/>},
-        { path: "/containment", text: "Containment", component: <Containment/>}
+        { path: "/containment", text: "Containment", component: <Containment/>},
+        { path: "/filterable", text: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
     ],
     dropdown: {
         title: "Dropdown",
