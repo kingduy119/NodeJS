@@ -21,12 +21,15 @@ import {
 
 import Home from "./page/Home";
 import NameForm from "./page/Form";
+import Temperature from "./page/Temperature";
+import Containment from "./page/Containment";
 
 const navConfig = {
     links: [
         { path: "/home", text: "Home", component: <Home/> },
         { path: "/form", text: "Form", component: <NameForm/>},
-        { path: "/pricing", text: "Pricing", component: <h2>Pricing Page</h2>}
+        { path: "/temperature", text: "Temperature", component: <Temperature/>},
+        { path: "/containment", text: "Containment", component: <Containment/>}
     ],
     dropdown: {
         title: "Dropdown",
