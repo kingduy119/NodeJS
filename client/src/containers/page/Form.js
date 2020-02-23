@@ -26,13 +26,15 @@ export default class NameForm extends Component {
         return(
             <form onSubmit={this.handleSubmit}>
                 <label>
-                    {/* Name:
+                    Name:
                     <input
                         type="text"
                         value={this.state.value}
                         onChange={this.handleChange}
-                    /> */}
+                    />
+                </label>
 
+                <label>
                     Pick your favorite flavor:
                     <select value={this.state.value} onChange={this.handleChange}>
                         <option value="grapefruit">Grapefruit</option>
@@ -40,8 +42,8 @@ export default class NameForm extends Component {
                         <option value="coconut">Coconut</option>
                         <option value="mango">Mango</option>
                     </select>
-
                 </label>
+
                 <input type="submit" value="Submit"/>
             </form>
         );

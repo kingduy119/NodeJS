@@ -1,8 +1,7 @@
+
 // React 12:
 // Think in React
 import React , { Component } from "react";
-
-
 
 // ---> Search:
 class Search extends Component {

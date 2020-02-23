@@ -16,7 +16,8 @@ import FormControl from "react-bootstrap/FormControl";
 
 import { 
     NavDropdown,
-    Button
+    Button,
+    Dropdown
 } from "react-bootstrap";
 
 import Home from "./page/Home";
@@ -35,20 +36,23 @@ const PRODUCTS = [
   ];
 
 const navConfig = {
-    links: [
-        { path: "/home", text: "Home", component: <Home/> },
-        { path: "/form", text: "Form", component: <NameForm/>},
-        { path: "/temperature", text: "Temperature", component: <Temperature/>},
-        { path: "/containment", text: "Containment", component: <Containment/>},
-        { path: "/filterable", text: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
-    ],
-    dropdown: {
-        title: "Dropdown",
+    main_concepts:{
+        name: "Main Concepts",
         links: [
-            { path: "/action/1-1", text: "Another Action" },
-            { path: "/action/1-2", text: "Something" },
-            { path: "/action/1-3", text: "Seperated Link" },
-            { path: "/action/1-4", text: "Other" }
+            { path: "/home", text: "Home", component: <Home/> },
+            { path: "/form", text: "Form", component: <NameForm/>},
+            { path: "/temperature", text: "Temperature", component: <Temperature/>},
+            { path: "/containment", text: "Containment", component: <Containment/>},
+            { path: "/filterable", text: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
+        ]
+    },
+    dropdown: {
+        name: "List Dropdown",
+        links: [
+            { path: "/action/1-1", text: "Another Action", component: <h2>Another Action</h2>},
+            { path: "/action/1-2", text: "Something", component: <h2>Something</h2> },
+            { path: "/action/1-3", text: "Seperated Link", component: <h2>Seperated Link</h2> },
+            { path: "/action/1-4", text: "Other", component: <h2>Other</h2> }
         ]
     },
     search: {
@@ -57,33 +61,45 @@ const navConfig = {
     }
 }
 
-export default class Navigation extends Component {
-    constructor(props) {
-        super(props);
-
-    }
-
-    // <--- Links --->
-    showLinks(links={}) {
-        return links.map(item => (<Nav.Link href={item.path}>{item.text}</Nav.Link>))
-    }
-
-    // <--- Dropdown --->
-    showDropDown(dropdown) {
-        return (
-            <NavDropdown
-        title={dropdown.title}
-        id="collasible-nav-dropdown"
-        >
-            {dropdown.links.map(item => (
-                <NavDropdown.Item path={item.path} >
-                    {item.text}
-                </NavDropdown.Item>
-            ))}
-        </NavDropdown>
+class ListRoute extends Component {
+    render() {
+        return(
+            this.props.routes.map(item => (
+                <Route path={item.path}>{item.component}</Route>
+            ))
         );
     }
+}
 
+class ListLink extends Component {
+    render() {
+        return (
+            this.props.links.map(item => (
+                <Nav.Link href={item.path}>{item.text}</Nav.Link>
+            ))
+        );
+    }
+}
+
+class ListDropdown extends Component {
+    render() {
+        const name = this.props.dropdown.name;
+        const links = this.props.dropdown.links;
+        return(
+            <NavDropdown title={name} id="collasible-nav-dropdown">
+                {links.map(item => (
+                    <NavDropdown.Item href={item.path}>{item.text}</NavDropdown.Item>
+                ))}
+            </NavDropdown>
+        );
+    }
+}
+
+export default class FilterNavigationContainer extends Component {
+    constructor(props) {
+        super(props);
+    }
+    
     // <--- Search --->
     showSearch(search){
         return ( 
@@ -100,15 +116,15 @@ export default class Navigation extends Component {
             <Navbar bg="dark" variant="dark" expand="lg">
 
             <Navbar.Brand href="/home">Navbar</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
+            <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse>
                 <Nav className="mr-auto">
-                    {/* <-- Links --> */}
-                    {this.showLinks(navConfig.links)}
+                    {/* <-- Main Concepts Dropdown --> */}
+                    <ListDropdown dropdown={navConfig.main_concepts}/>
 
                     {/* <-- Dropdown --> */}
-                    {this.showDropDown(navConfig.dropdown)}
+                    <ListDropdown dropdown={navConfig.dropdown}/>
                 </Nav>
 
                 {/* <-- Search -->> */}
@@ -118,13 +134,13 @@ export default class Navigation extends Component {
             </Navbar>
 
             <Switch>
-                {navConfig.links.map(item => (
-                    <Route path={item.path}>
-                        {item.component}
-                    </Route>
-                ))}
+               <React.Fragment>
+                <ListRoute routes={navConfig.main_concepts.links}/>
+                <ListRoute routes={navConfig.dropdown.links}/>
+               </React.Fragment>
             </Switch>
         </React.Fragment>
         )
     }
 }
+
