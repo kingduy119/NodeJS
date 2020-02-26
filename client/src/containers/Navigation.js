@@ -26,6 +26,11 @@ import Temperature from "./page/Temperature";
 import Containment from "./page/Containment";
 import FilterableProductTable from "./page/FilterableProductTable.js";
 
+// Advanced:
+import Portal from "./page/advanced/Portal";
+import Hook from "./page/advanced/Hook";
+import LifeCycle from "./page/advanced/Lifecycle";
+
 const PRODUCTS = [
     {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
     {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
@@ -47,11 +52,11 @@ const navConfig = {
         ]
     },
     dropdown: {
-        name: "List Dropdown",
+        name: "Advanced",
         links: [
-            { path: "/action/1-1", text: "Another Action", component: <h2>Another Action</h2>},
-            { path: "/action/1-2", text: "Something", component: <h2>Something</h2> },
-            { path: "/action/1-3", text: "Seperated Link", component: <h2>Seperated Link</h2> },
+            { path: "/portal", text: "Portal", component: <Portal />},
+            { path: "/hook", text: "React Hook", component: <Hook />},
+            { path: "/lifecycle", text: "Lifecycle", component: <LifeCycle />},
             { path: "/action/1-4", text: "Other", component: <h2>Other</h2> }
         ]
     },
