@@ -31,6 +31,9 @@ import Portal from "./page/advanced/Portal";
 import Hook from "./page/advanced/Hook";
 import LifeCycle from "./page/advanced/Lifecycle";
 
+// Concurrent Data fetching:
+import SuspenseDataFetch from "./page/concurrent-data-fetch/Suspense";
+
 const PRODUCTS = [
     {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
     {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
@@ -51,13 +54,19 @@ const navConfig = {
             { path: "/filterable", text: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
         ]
     },
-    dropdown: {
+    advanced: {
         name: "Advanced",
         links: [
             { path: "/portal", text: "Portal", component: <Portal />},
             { path: "/hook", text: "React Hook", component: <Hook />},
             { path: "/lifecycle", text: "Lifecycle", component: <LifeCycle />},
             { path: "/action/1-4", text: "Other", component: <h2>Other</h2> }
+        ]
+    },
+    concurrent: {
+        name: "Concurrent DF",
+        links: [
+            { path: "/data-fetch", text: "Suspense Data Fetch", component: <SuspenseDataFetch />}
         ]
     },
     search: {
@@ -128,8 +137,12 @@ export default class FilterNavigationContainer extends Component {
                     {/* <-- Main Concepts Dropdown --> */}
                     <ListDropdown dropdown={navConfig.main_concepts}/>
 
-                    {/* <-- Dropdown --> */}
-                    <ListDropdown dropdown={navConfig.dropdown}/>
+                    {/* <-- Advanced --> */}
+                    <ListDropdown dropdown={navConfig.advanced}/>
+
+                    {/* <-- Concurrent Data Fetching --> */}
+                    <ListDropdown dropdown={navConfig.concurrent}/>
+
                 </Nav>
 
                 {/* <-- Search -->> */}
@@ -141,7 +154,8 @@ export default class FilterNavigationContainer extends Component {
             <Switch>
                <React.Fragment>
                 <ListRoute routes={navConfig.main_concepts.links}/>
-                <ListRoute routes={navConfig.dropdown.links}/>
+                <ListRoute routes={navConfig.advanced.links}/>
+                <ListRoute routes={navConfig.concurrent.links}/>
                </React.Fragment>
             </Switch>
         </React.Fragment>
