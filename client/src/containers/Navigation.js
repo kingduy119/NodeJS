@@ -33,6 +33,7 @@ import LifeCycle from "./page/advanced/Lifecycle";
 
 // Concurrent Data fetching:
 import SuspenseDataFetch from "./page/concurrent-data-fetch/Suspense";
+import UIModePattern from "./page/concurrent-data-fetch/ModePattern";
 
 const PRODUCTS = [
     {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
@@ -66,7 +67,8 @@ const navConfig = {
     concurrent: {
         name: "Concurrent DF",
         links: [
-            { path: "/data-fetch", text: "Suspense Data Fetch", component: <SuspenseDataFetch />}
+            { path: "/data-fetch", text: "Suspense Data Fetch", component: <SuspenseDataFetch />},
+            { path: "/ui-pattern", text: "UI Mode Pattern", component: <UIModePattern />}
         ]
     },
     search: {
