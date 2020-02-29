@@ -51,11 +51,11 @@ const dataNavbar = [
         id: "dropdown_main-concepts",
         name: "Main Concepts",
         links: [
-            { path: "/home", text: "Home", component: <Home/> },
-            { path: "/form", text: "Form", component: <NameForm/>},
-            { path: "/temperature", text: "Temperature", component: <Temperature/>},
-            { path: "/containment", text: "Containment", component: <Containment/>},
-            { path: "/filterable", text: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
+            { path: "/home", name: "Home", component: <Home/> },
+            { path: "/form", name: "Form", component: <NameForm/>},
+            { path: "/temperature", name: "Temperature", component: <Temperature/>},
+            { path: "/containment", name: "Containment", component: <Containment/>},
+            { path: "/filterable", name: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
         ]
     },
     {
@@ -63,10 +63,10 @@ const dataNavbar = [
         id: "dropdown_advanced",
         name: "Advanced",
         links: [
-            { path: "/portal", text: "Portal", component: <Portal />},
-            { path: "/hook", text: "React Hook", component: <Hook />},
-            { path: "/lifecycle", text: "Lifecycle", component: <LifeCycle />},
-            { path: "/action/1-4", text: "Other", component: <h2>Other</h2> }
+            { path: "/portal", name: "Portal", component: <Portal />},
+            { path: "/hook", name: "React Hook", component: <Hook />},
+            { path: "/lifecycle", name: "Lifecycle", component: <LifeCycle />},
+            { path: "/action/1-4", name: "Other", component: <h2>Other</h2> }
         ]
     },
     {
@@ -74,62 +74,42 @@ const dataNavbar = [
         id: "dropdown_concurent-data-fetch",
         name: "Concurent Data Fetch",
         links: [
-            { path: "/data-fetch", text: "Suspense Data Fetch", component: <SuspenseDataFetch />},
-            { path: "/ui-pattern", text: "UI Mode Pattern", component: <UIModePattern />}
+            { path: "/data-fetch", name: "Suspense Data Fetch", component: <SuspenseDataFetch />},
+            { path: "/ui-pattern", name: "UI Mode Pattern", component: <UIModePattern />}
         ]
     }
 ];
 
 const navConfig = {
-    main_concepts:{
-        name: "Main Concepts",
-        links: [
-            { path: "/home", text: "Home", component: <Home/> },
-            { path: "/form", text: "Form", component: <NameForm/>},
-            { path: "/temperature", text: "Temperature", component: <Temperature/>},
-            { path: "/containment", text: "Containment", component: <Containment/>},
-            { path: "/filterable", text: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
-        ]
-    },
-    advanced: {
-        name: "Advanced",
-        links: [
-            { path: "/portal", text: "Portal", component: <Portal />},
-            { path: "/hook", text: "React Hook", component: <Hook />},
-            { path: "/lifecycle", text: "Lifecycle", component: <LifeCycle />},
-            { path: "/action/1-4", text: "Other", component: <h2>Other</h2> }
-        ]
-    },
-    concurrent: {
-        name: "Concurrent DF",
-        links: [
-            { path: "/data-fetch", text: "Suspense Data Fetch", component: <SuspenseDataFetch />},
-            { path: "/ui-pattern", text: "UI Mode Pattern", component: <UIModePattern />}
-        ]
-    },
     search: {
         text: <FormControl type="text" placeholder="Search" className="mr-sm-2"/>,
         button: <Button variant="outline-info">Search</Button>
     }
 }
 
-class ListRoute extends Component {
-    render() {
-        return(
-            this.props.routes.map(item => (
-                <Route path={item.path}>{item.component}</Route>
-            ))
-        );
-    }
+function FormSearchFilter() {
+    return(
+        <Form inline>
+            <FormControl type="text" className="mr-sm-2" placeholder="Search"/>
+            <Button variant="outline-info" >Search</Button>
+        </Form>
+    );
 }
 
 function RouteGroup({data}) {
-    let routes = data;
     return(
         <Switch>
-            {routes.map(route => (
-                <Route path={route.path}>{route.component}</Route>                
-            ))}
+            <React.Fragment>
+            {data.map(item => {
+                if(item.type === "link")
+                    return <Route path={item.path}>{item.component}</Route>
+                else if(item.type === "dropdown") {
+                    return item.links.map(link => {
+                        return <Route path={link.path}>{link.component}</Route>
+                    })
+                }
+            })}
+            </React.Fragment>
         </Switch>
     );
 }
@@ -141,7 +121,7 @@ function NavbarCollapseGroup({data}) {
                 {data.map(item => {
                     if(item.type === "link")
                         return <LinkItem link={item}/>
-                    else
+                    else if(item.type === "dropdown")
                         return <DropdownItem dropdown={item}/>
                 })}
             </Nav>
@@ -159,35 +139,10 @@ function DropdownItem({dropdown}) {
     let links = dropdown.links;
     return(
         <NavDropdown title={name} id={id}>
-            <React.Fragment>
-            {links.map(item => (
+            {links.map(item => 
                 <NavDropdown.Item href={item.path}>{item.name}</NavDropdown.Item>
-            ))}
-            </React.Fragment>
+            )}
         </NavDropdown>
-    );
-}
-
-class ListDropdown extends Component {
-    render() {
-        const name = this.props.dropdown.name;
-        const links = this.props.dropdown.links;
-        return(
-            <NavDropdown title={name} id="collasible-nav-dropdown">
-                {links.map(item => (
-                    <NavDropdown.Item href={item.path}>{item.text}</NavDropdown.Item>
-                ))}
-            </NavDropdown>
-        );
-    }
-}
-
-function Search({search}) {
-    return(
-        <Form inline>
-            {search.text}
-            {search.button}
-        </Form>
     );
 }
 
@@ -200,21 +155,19 @@ export default class FilterNavigationContainer extends Component {
         return (
         <React.Fragment>
             <Navbar bg="dark" variant="dark" expand="lg">
+                {/* --- Logo --- */}
+                <Navbar.Brand href="/home">Navbar</Navbar.Brand>
 
-            <Navbar.Brand href="/home">Navbar</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                {/* --- Navigation --- */}
+                <NavbarCollapseGroup data={dataNavbar}/>
 
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <NavbarCollapseGroup data={dataNavbar}/>
-            
+                {/* --- SearchForm --- */}
+                <FormSearchFilter />
             </Navbar>
 
-            <Switch>
-               <React.Fragment>
-                <ListRoute routes={navConfig.main_concepts.links}/>
-                <ListRoute routes={navConfig.advanced.links}/>
-                <ListRoute routes={navConfig.concurrent.links}/>
-               </React.Fragment>
-            </Switch>
+            {/* --- router --- */}
+            <RouteGroup data={dataNavbar} />
         </React.Fragment>
         )
     }
