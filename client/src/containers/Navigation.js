@@ -44,6 +44,42 @@ const PRODUCTS = [
     {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
   ];
 
+
+const dataNavbar = [
+    {
+        type: "dropdown",
+        id: "dropdown_main-concepts",
+        name: "Main Concepts",
+        links: [
+            { path: "/home", text: "Home", component: <Home/> },
+            { path: "/form", text: "Form", component: <NameForm/>},
+            { path: "/temperature", text: "Temperature", component: <Temperature/>},
+            { path: "/containment", text: "Containment", component: <Containment/>},
+            { path: "/filterable", text: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
+        ]
+    },
+    {
+        type: "dropdown",
+        id: "dropdown_advanced",
+        name: "Advanced",
+        links: [
+            { path: "/portal", text: "Portal", component: <Portal />},
+            { path: "/hook", text: "React Hook", component: <Hook />},
+            { path: "/lifecycle", text: "Lifecycle", component: <LifeCycle />},
+            { path: "/action/1-4", text: "Other", component: <h2>Other</h2> }
+        ]
+    },
+    {
+        type: "dropdown",
+        id: "dropdown_concurent-data-fetch",
+        name: "Concurent Data Fetch",
+        links: [
+            { path: "/data-fetch", text: "Suspense Data Fetch", component: <SuspenseDataFetch />},
+            { path: "/ui-pattern", text: "UI Mode Pattern", component: <UIModePattern />}
+        ]
+    }
+];
+
 const navConfig = {
     main_concepts:{
         name: "Main Concepts",
@@ -87,14 +123,49 @@ class ListRoute extends Component {
     }
 }
 
-class ListLink extends Component {
-    render() {
-        return (
-            this.props.links.map(item => (
-                <Nav.Link href={item.path}>{item.text}</Nav.Link>
-            ))
-        );
-    }
+function RouteGroup({data}) {
+    let routes = data;
+    return(
+        <Switch>
+            {routes.map(route => (
+                <Route path={route.path}>{route.component}</Route>                
+            ))}
+        </Switch>
+    );
+}
+
+function NavbarCollapseGroup({data}) {
+    return(
+        <Navbar.Collapse>
+            <Nav className="mr-auto">
+                {data.map(item => {
+                    if(item.type === "link")
+                        return <LinkItem link={item}/>
+                    else
+                        return <DropdownItem dropdown={item}/>
+                })}
+            </Nav>
+        </Navbar.Collapse>
+    );
+}
+
+function LinkItem({link}) {
+    return <Nav.Link href={link.path}>{link.name}</Nav.Link>;
+}
+
+function DropdownItem({dropdown}) {
+    let name = dropdown.name;
+    let id = dropdown.id;
+    let links = dropdown.links;
+    return(
+        <NavDropdown title={name} id={id}>
+            <React.Fragment>
+            {links.map(item => (
+                <NavDropdown.Item href={item.path}>{item.name}</NavDropdown.Item>
+            ))}
+            </React.Fragment>
+        </NavDropdown>
+    );
 }
 
 class ListDropdown extends Component {
@@ -111,21 +182,20 @@ class ListDropdown extends Component {
     }
 }
 
+function Search({search}) {
+    return(
+        <Form inline>
+            {search.text}
+            {search.button}
+        </Form>
+    );
+}
+
 export default class FilterNavigationContainer extends Component {
     constructor(props) {
         super(props);
     }
     
-    // <--- Search --->
-    showSearch(search){
-        return ( 
-            <Form inline>
-                {search.text}
-                {search.button}
-            </Form>
-        )
-    }
-
     render() {
         return (
         <React.Fragment>
@@ -134,23 +204,8 @@ export default class FilterNavigationContainer extends Component {
             <Navbar.Brand href="/home">Navbar</Navbar.Brand>
 
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse>
-                <Nav className="mr-auto">
-                    {/* <-- Main Concepts Dropdown --> */}
-                    <ListDropdown dropdown={navConfig.main_concepts}/>
-
-                    {/* <-- Advanced --> */}
-                    <ListDropdown dropdown={navConfig.advanced}/>
-
-                    {/* <-- Concurrent Data Fetching --> */}
-                    <ListDropdown dropdown={navConfig.concurrent}/>
-
-                </Nav>
-
-                {/* <-- Search -->> */}
-                {this.showSearch(navConfig.search)}
-                
-            </Navbar.Collapse>
+            <NavbarCollapseGroup data={dataNavbar}/>
+            
             </Navbar>
 
             <Switch>
