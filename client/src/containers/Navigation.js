@@ -1,84 +1,7 @@
-import React, {
-    Component
-} from "react";
-
-import {
-    BrowserRouter,
-    Switch,
-    Route
-} from "react-router-dom";
-
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-
-import Form from "react-bootstrap/Form";
-import FormControl from "react-bootstrap/FormControl";
-
-import { 
-    NavDropdown,
-    Button,
-    Dropdown
-} from "react-bootstrap";
-
-import Home from "./page/Home";
-import NameForm from "./page/Form";
-import Temperature from "./page/Temperature";
-import Containment from "./page/Containment";
-import FilterableProductTable from "./page/FilterableProductTable.js";
-
-// Advanced:
-import Portal from "./page/advanced/Portal";
-import Hook from "./page/advanced/Hook";
-import LifeCycle from "./page/advanced/Lifecycle";
-
-// Concurrent Data fetching:
-import SuspenseDataFetch from "./page/concurrent-data-fetch/Suspense";
-import UIModePattern from "./page/concurrent-data-fetch/ModePattern";
-
-const PRODUCTS = [
-    {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
-    {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
-    {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
-    {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
-    {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
-    {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
-  ];
-
-
-const dataNavbar = [
-    {
-        type: "dropdown",
-        id: "dropdown_main-concepts",
-        name: "Main Concepts",
-        links: [
-            { path: "/home", name: "Home", component: <Home/> },
-            { path: "/form", name: "Form", component: <NameForm/>},
-            { path: "/temperature", name: "Temperature", component: <Temperature/>},
-            { path: "/containment", name: "Containment", component: <Containment/>},
-            { path: "/filterable", name: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
-        ]
-    },
-    {
-        type: "dropdown",
-        id: "dropdown_advanced",
-        name: "Advanced",
-        links: [
-            { path: "/portal", name: "Portal", component: <Portal />},
-            { path: "/hook", name: "React Hook", component: <Hook />},
-            { path: "/lifecycle", name: "Lifecycle", component: <LifeCycle />},
-            { path: "/action/1-4", name: "Other", component: <h2>Other</h2> }
-        ]
-    },
-    {
-        type: "dropdown",
-        id: "dropdown_concurent-data-fetch",
-        name: "Concurent Data Fetch",
-        links: [
-            { path: "/data-fetch", name: "Suspense Data Fetch", component: <SuspenseDataFetch />},
-            { path: "/ui-pattern", name: "UI Mode Pattern", component: <UIModePattern />}
-        ]
-    }
-];
+import React, { Component } from "react";
+import {Switch, Route} from "react-router-dom";
+import {Navbar, Nav, Form, FormControl, NavDropdown, Button} from "react-bootstrap";
+import { fetchNavbar } from "../api/FakeApi";
 
 const navConfig = {
     search: {
@@ -152,6 +75,7 @@ export default class FilterNavigationContainer extends Component {
     }
     
     render() {
+        const dataNavbar = fetchNavbar();
         return (
         <React.Fragment>
             <Navbar bg="dark" variant="dark" expand="lg">
