@@ -7,10 +7,10 @@ import { Provider } from 'react-redux'
 
 import App from './App';
 import AsyncApp from './AsyncApp';
-import ConfigureStore from '../store/configure-store';
-// import ConfigureStore from '../store/configure-async-store';
+// import ConfigureStore from '../store/configure-store';
+import Store from "../redux/Store";
 
-const store = ConfigureStore();
+const store = Store();
 
 class Root extends Component {
     render() {

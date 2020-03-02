@@ -4,8 +4,8 @@ import {Form, FormControl, Button} from "react-bootstrap";
 
 class FormSearch extends React.Component {
     render() {
-        let input = this.props.input;
-        let button = this.props.button;
+        let input = this.props.search.input;
+        let button = this.props.search.button;
         return(
             <Form inline>
                 <FormControl
@@ -22,12 +22,12 @@ class FormSearch extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    input: state.forms.search.input,
-    button: state.forms.search.button
+    search: state.navbar.search
 });
 
 const mapDispatchToProps = dispacth => ({
-    onClick: dispatch(() => {  })
+    onSearchInputChange: () => { console.log("Search Input onChanged()"); },
+    onSearchButtonClick: () => { console.log("Search Button onClick()"); }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FormSearch);

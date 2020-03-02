@@ -3,7 +3,7 @@ import {
     INVALIDATE_SUBREDDIT,
     REQUEST_POSTS,
     RECEIVE_POSTS
-} from '../actions/action-async';
+} from '../actions/async-actions';
 import { combineReducers } from 'redux'
 
 function posts(

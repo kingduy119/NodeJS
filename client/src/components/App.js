@@ -6,12 +6,13 @@ import Footer from '../components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 // import Navigation from '../components/navbar/Navigation';
 import Navigation from "../containers/Navigation";
+import NavbarFilter from "../containers/NavbarFilter";
 
 class App extends Component {
     render() {
         return (
             <div>
-                <Navigation/>
+                <NavbarFilter/>
             </div>
         );
     }

@@ -41,6 +41,47 @@ let ringoPosts = [
     }
 ];
 
+const configNavbar = {
+    brand: {path: "/home", text: "Logo"},
+    listlink: [
+        {
+            type: "dropdown",
+            id: "dropdown_main-concepts",
+            title: "Main Concepts",
+            links: [
+                { path: "/home", title: "Home", component: <Home/> },
+                { path: "/form", title: "Form", component: <NameForm/>},
+                { path: "/temperature", title: "Temperature", component: <Temperature/>},
+                { path: "/containment", title: "Containment", component: <Containment/>},
+                { path: "/filterable", title: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
+            ]
+        },
+        {
+            type: "dropdown",
+            id: "dropdown_advanced",
+            title: "Advanced",
+            links: [
+                { path: "/portal", title: "Portal", component: <Portal />},
+                { path: "/hook", title: "React Hook", component: <Hook />},
+                { path: "/lifecycle", title: "Lifecycle", component: <LifeCycle />},
+                { path: "/action/1-4", ntitleame: "Other", component: <h2>Other</h2> }
+            ]
+        },
+        {
+            type: "dropdown",
+            id: "dropdown_concurent-data-fetch",
+            title: "Concurent Data Fetch",
+            links: [
+                { path: "/data-fetch", title: "Suspense Data Fetch", component: <SuspenseDataFetch />},
+                { path: "/ui-pattern", title: "UI Mode Pattern", component: <UIModePattern />}
+            ]
+        }
+    ],
+    search: {
+        input: {type: "text", className: "mr-sm-2", placeholder: "Search"},
+        button: {variant: "outline-info", text: "Search"}
+    }
+};
 const dataNavbar = [
     {
         type: "dropdown",
@@ -139,7 +180,7 @@ function fetchPosts() {
 }
 
 export function fetchNavbar() {
-    return dataNavbar;
+    return configNavbar;
 }
 
 function fetchPostTrivia() {
