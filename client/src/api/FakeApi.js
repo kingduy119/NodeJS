@@ -82,40 +82,7 @@ const configNavbar = {
         button: {variant: "outline-info", text: "Search"}
     }
 };
-const dataNavbar = [
-    {
-        type: "dropdown",
-        id: "dropdown_main-concepts",
-        name: "Main Concepts",
-        links: [
-            { path: "/home", name: "Home", component: <Home/> },
-            { path: "/form", name: "Form", component: <NameForm/>},
-            { path: "/temperature", name: "Temperature", component: <Temperature/>},
-            { path: "/containment", name: "Containment", component: <Containment/>},
-            { path: "/filterable", name: "Filterable", component: <FilterableProductTable products={PRODUCTS}/>}
-        ]
-    },
-    {
-        type: "dropdown",
-        id: "dropdown_advanced",
-        name: "Advanced",
-        links: [
-            { path: "/portal", name: "Portal", component: <Portal />},
-            { path: "/hook", name: "React Hook", component: <Hook />},
-            { path: "/lifecycle", name: "Lifecycle", component: <LifeCycle />},
-            { path: "/action/1-4", name: "Other", component: <h2>Other</h2> }
-        ]
-    },
-    {
-        type: "dropdown",
-        id: "dropdown_concurent-data-fetch",
-        name: "Concurent Data Fetch",
-        links: [
-            { path: "/data-fetch", name: "Suspense Data Fetch", component: <SuspenseDataFetch />},
-            { path: "/ui-pattern", name: "UI Mode Pattern", component: <UIModePattern />}
-        ]
-    }
-];
+
 
 export function fetchProfileData() {
     let userPromise = fetchUser();
@@ -158,7 +125,6 @@ function wrapPromise(promise) {
 function fetchUser() {
     return new Promise(resolve => {
         setTimeout(() => {
-            console.log("fetched user");
             resolve({
                 name: "Ringo Start"
             });
@@ -169,7 +135,6 @@ function fetchUser() {
 function fetchPosts() {
     return new Promise(resolve => {
         setTimeout(() => {
-            console.log("fetched posts");
             resolve([
                 { id: 0, text: "I get by witl a little help from my friends"},
                 { id: 1, text: "I'd like to be under the sea in an octupus's garden"},
