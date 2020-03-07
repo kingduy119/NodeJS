@@ -1,13 +1,61 @@
-const express = require('express');
-const helmet = require('helmet');
-const app = express();
-const path = require('path');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const isAuth = require('./middleware/is-auth');
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookiePartser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var logger = require('morgan');
+var helmet = require('helmet');
+var graphqlHTTP = require('express-graphql');
 
-// Redis connect:
-// ===========================================================================
+
+var indexRouter = require('./routes/index');
+var allSchema = require('./schemas/SchemaRoot');
+
+var app = express();
+
+// View engine setup
+app.set('views'), path.join(__dirname, 'views');
+app.set('view engine', 'jade');
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookiePartser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet());
+
+// Routers
+app.use('/', indexRouter);
+app.use('/graphql',
+    graphqlHTTP(async(request, response, graphQLParams) => ({
+        schema: allSchema,
+        graphiql: true
+    }))
+);
+
+/**
+ * Handle error
+ */
+
+// catch 404 and forward to error handle
+app.use((req, res, next) => {
+    next(createError(404));
+})
+
+// error handler
+app.use((err, req, res, next) => {
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    //render the error page
+    res.status(err.status || 500);
+    res.render('error');
+})
+
+/**
+ * Redis Server
+ */
+
 const Redis = require('./cache/Redis');
 
 Redis.getClient().on('connect', () => {
@@ -22,20 +70,10 @@ Redis.getClient().on('error', () => {
     console.log(`Error: ${err}`);
 });
 
+
+module.exports = app;
+
 // ===========================================================================
-
-app.use(helmet());
-// app.use(morgan('dev'));
-// app.use('/upload', express.static('upload'));
-// app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
-
-// GraphQL
-// ===========================================================================
-const graphqlHTTP = require('express-graphql');
-const RootSchema = require('./schemas/SchemaRoot');
-
 // app.use((req, res, next) => {
 //     res.setHeader('Access-Control-Allow-Origin', '*');
 //     res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS');
@@ -46,39 +84,23 @@ const RootSchema = require('./schemas/SchemaRoot');
 //     next();
 // });
 
-
-app.use(isAuth);
-app.use('/graphql',
-    graphqlHTTP(async(request, response, graphQLParams) => ({
-        schema: RootSchema,
-        graphiql: true
-    }))
-);
-// ===========================================================================
-
-// Set up:
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-// Handle error:
-// ===========================================================================
-
-app.use((req, res, next) => {
-    const error = new Error('Not found');
-    error.status = 404;
-    next(error);
-});
-
-app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.json({
-        error: {
-            message: error.message
-        }
-    });
-});
 // ===========================================================================
 
 
-module.exports = app;
+// // Middleware:
+// function logErrors(err, req, res, next) {
+//     console.error(err.stack);
+//     next(err);
+// }
 
+// function clientErrorHandler(err, req, res, next) {
+//     if(req.xhr) {
+//         res.status(500).send({error: 'Something failed!'});
+//     } else {
+//         next(err);
+//     }
+// }
+
+// function errorHandler(err, req, res, next) {
+//     res.status(500).send("Something broke");
+// }

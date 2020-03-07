@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('./app');
 const mongoose = require('mongoose');
-const port = process.env.PORT || 1000;
+const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 const client = require('socket.io')(server).sockets;
