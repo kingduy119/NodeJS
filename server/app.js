@@ -9,6 +9,8 @@ var graphqlHTTP = require('express-graphql');
 
 
 var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
+
 var allSchema = require('./schemas/SchemaRoot');
 
 var app = express();
@@ -26,6 +28,7 @@ app.use(helmet());
 
 // Routers
 app.use('/', indexRouter);
+app.use('/users', usersRouter);
 app.use('/graphql',
     graphqlHTTP(async(request, response, graphQLParams) => ({
         schema: allSchema,
