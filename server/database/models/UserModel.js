@@ -9,6 +9,10 @@ const userSchema = mongoose.Schema({
         type: String,
         require: true
     },
+    salt: {
+        type: String,
+        require: true
+    },
     hash: {
         type: String,
         require: true
