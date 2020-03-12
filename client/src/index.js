@@ -3,9 +3,10 @@ import { render } from 'react-dom';
 import Root from './components/Root';
 import * as serviceWorker from './serviceWorker';
 
+import YoutubeApp from "./youtube/App";
 
 render(
-    <Root/>
+    <YoutubeApp />
     ,document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

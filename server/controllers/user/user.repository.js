@@ -1,5 +1,4 @@
 const UserModel = require('../../database/models/UserModel');
-const Client = require('../../cache/Redis').getClient();
 
 class UserRepository {
     constructor() {
